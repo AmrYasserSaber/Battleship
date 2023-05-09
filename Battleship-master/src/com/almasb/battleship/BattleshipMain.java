@@ -1,6 +1,7 @@
 package com.almasb.battleship;
 
-import com.almasb.battleship.Board.Cell;
+import java.util.Random;
+
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -11,13 +12,12 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-import java.util.Random;
+import com.almasb.battleship.Board.Cell;
 
 public class BattleshipMain extends Application {
 
     private boolean running = false;
-    private Board enemyBoard;
-    private Board playerBoard;
+    private Board enemyBoard, playerBoard;
 
     private int shipsToPlace = 5;
 
@@ -25,7 +25,7 @@ public class BattleshipMain extends Application {
 
     private Random random = new Random();
 
-    private BorderPane createContent() {
+    private Parent createContent() {
         BorderPane root = new BorderPane();
         root.setPrefSize(600, 800);
 
