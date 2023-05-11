@@ -39,6 +39,7 @@ public class BattleshipMain extends Application {
             Parent root = createGame();
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Scene scene = new Scene(root);
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("style.css")).toExternalForm());
             stage.setScene(scene);
             stage.show();
         });
