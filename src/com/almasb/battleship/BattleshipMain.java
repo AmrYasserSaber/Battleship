@@ -1,12 +1,17 @@
 package com.almasb.battleship;
 
+import java.util.Objects;
 import java.util.Random;
 
 import javafx.application.Application;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -17,7 +22,8 @@ import com.almasb.battleship.Board.Cell;
 public class BattleshipMain extends Application {
 
     private boolean running = false;
-    private Board enemyBoard, playerBoard;
+    private Board enemyBoard;
+    private Board playerBoard;
 
     private int shipsToPlace = 5;
 
@@ -25,9 +31,23 @@ public class BattleshipMain extends Application {
 
     private Random random = new Random();
 
-    private Parent createContent() {
+    private  Parent createMainScene(){
+        AnchorPane mainScene= new AnchorPane();
+        mainScene.setPrefSize(600,500);
+        mainScene.getStyleClass().add("anchor-pane");
+        mainScene.setOnMouseClicked((MouseEvent event) -> {
+            Parent root = createGame();
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        });
+        return mainScene;
+    }
+    private Parent createGame() {
         BorderPane root = new BorderPane();
         root.setPrefSize(600, 800);
+
 
         root.setRight(new Text("RIGHT SIDEBAR - CONTROLS"));
 
@@ -66,7 +86,6 @@ public class BattleshipMain extends Application {
         vbox.setAlignment(Pos.CENTER);
 
         root.setCenter(vbox);
-
         return root;
     }
 
@@ -106,8 +125,9 @@ public class BattleshipMain extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Scene scene = new Scene(createContent());
+        Scene scene = new Scene(createMainScene());
         primaryStage.setTitle("Battleship");
+        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("style.css")).toExternalForm());
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
         primaryStage.show();

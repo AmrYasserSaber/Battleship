@@ -1,0 +1,5 @@
+.anchor-pane {
+    -fx-background-color: #ffffff; /* Set the background color */
+    -fx-background-image: url("./istockphoto-1411179874-612x612.jpg"); /* Set the background image */
+    -fx-background-size: cover; /* Adjust the background image size */
+}
