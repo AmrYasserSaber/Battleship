@@ -9,14 +9,12 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import com.almasb.battleship.Board.Cell;
@@ -55,7 +53,7 @@ public class BattleshipMain extends Application {
         for (int i = 1; i <= 5; i++) {
             shipList.add(i);
         }
-        root.setRight(renderShips(shipList));
+        renderShips(shipList,root);
 
         enemyBoard = new Board(true, event -> {
             if (!running)
@@ -95,7 +93,7 @@ public class BattleshipMain extends Application {
         return root;
     }
 
-    private Node renderShips(ArrayList<Integer> shipList) {
+    private void renderShips(ArrayList<Integer> shipList, BorderPane root) {
         int n=shipList.size();
         VBox sideBar = new VBox();
         for (int i=0;i<n;i++){
@@ -109,7 +107,7 @@ public class BattleshipMain extends Application {
         sideBar.setSpacing(50);
         sideBar.setPadding(new Insets(200, 50, 0, 50));
 
-        return sideBar;
+        root.setRight(sideBar);
     }
 
     private void enemyMove() {
