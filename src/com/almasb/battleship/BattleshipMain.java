@@ -2,8 +2,9 @@ package com.almasb.battleship;
 
 import java.util.Objects;
 import java.util.Random;
-
+import java.util.ArrayList;
 import javafx.application.Application;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -13,6 +14,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -49,8 +51,11 @@ public class BattleshipMain extends Application {
         BorderPane root = new BorderPane();
         root.setPrefSize(600, 800);
 
-
-        root.setRight(new Text("RIGHT SIDEBAR - CONTROLS"));
+        ArrayList<Integer> shipList = new ArrayList<Integer>(5);
+        for (int i = 1; i <= 5; i++) {
+            shipList.add(i);
+        }
+        root.setRight(renderShips(shipList));
 
         enemyBoard = new Board(true, event -> {
             if (!running)
@@ -88,6 +93,23 @@ public class BattleshipMain extends Application {
 
         root.setCenter(vbox);
         return root;
+    }
+
+    private Node renderShips(ArrayList<Integer> shipList) {
+        int n=shipList.size();
+        VBox sideBar = new VBox();
+        for (int i=0;i<n;i++){
+            HBox ship =new HBox();
+            for (int j = 1; j <= shipList.get(i);j++) {
+                ShipCell cell = new ShipCell();
+                ship.getChildren().add(cell);
+            }
+            sideBar.getChildren().add(ship);
+        }
+        sideBar.setSpacing(50);
+        sideBar.setPadding(new Insets(200, 50, 0, 50));
+
+        return sideBar;
     }
 
     private void enemyMove() {
