@@ -13,5 +13,7 @@ import javafx.scene.shape.Rectangle;
             super(30, 30);
             setFill(Color.LIGHTGRAY);
             setStroke(Color.BLACK);
+
+
         }
 }

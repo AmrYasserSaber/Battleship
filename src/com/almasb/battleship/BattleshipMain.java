@@ -6,20 +6,34 @@ import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
+import javafx.scene.text.Font;
 
 import com.almasb.battleship.Board.Cell;
 
 public class BattleshipMain extends Application {
+
+    public static Pane shipHover = new Pane();
+    public static StackPane basis = new StackPane();
+
+    public static int scoreVal = 0;
+    Text scoreTxt = new Text(35, 75, "Map Out\nYour Strategy");
+
+    public final String PATH = "D:/projects/Battleship-main/Battleship-main/src/com/almasb/battleship/";
 
     private boolean running = false;
     private Board enemyBoard;
@@ -29,13 +43,33 @@ public class BattleshipMain extends Application {
 
     private boolean enemyTurn = false;
 
+    public static boolean hPlacing = false;
+
     private Random random = new Random();
 
-    private  Parent createMainScene(){
+
+    private  Parent createMainScene() {
         AnchorPane mainScene= new AnchorPane();
-        mainScene.setPrefSize(600,500);
+        mainScene.setPrefSize(600,800);
         mainScene.getStyleClass().add("anchor-pane");
-        mainScene.setOnMouseClicked((MouseEvent event) -> {
+        VBox menu = new VBox(50);
+        menu.setPrefSize(600, 600);
+
+        Image logo = new Image(PATH + "imgs/gameLogo.png", 400, 153.5, true, true);
+        ImageView logoView = new ImageView(logo);
+
+        Image startBtn = new Image(PATH + "imgs/start.png", 200, 62, true, true);
+        ImageView startBtnView = new ImageView(startBtn);
+
+        startBtnView.getStyleClass().add("startBtn");
+
+        menu.getChildren().addAll(logoView, startBtnView);
+        menu.setAlignment(Pos.CENTER);
+
+//        StackPane.setAlignment(menu,Pos.CENTER);
+        mainScene.getChildren().add(menu);
+
+        startBtnView.setOnMouseClicked((MouseEvent event) -> {
             Parent root = createGame();
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Scene scene = new Scene(root);
@@ -46,8 +80,10 @@ public class BattleshipMain extends Application {
         return mainScene;
     }
     private Parent createGame() {
+        basis.setMinSize(600, 800);
         BorderPane root = new BorderPane();
         root.setPrefSize(600, 800);
+        root.getStyleClass().add("gamePlay");
 
         ArrayList<Integer> shipList = new ArrayList<Integer>(5);
         for (int i = 1; i <= 5; i++) {
@@ -63,11 +99,20 @@ public class BattleshipMain extends Application {
             if (cell.wasShot)
                 return;
 
+
             enemyTurn = !cell.shoot();
 
+            if(!enemyTurn){
+                scoreTxt.setStyle("-fx-font-size: 35px;");
+                scoreVal += 10;
+                scoreTxt.setText(String.valueOf(scoreVal));
+//                System.out.printf("score: %d \n enemy: %d \n", scoreVal, enemyBoard.ships);
+            }
+
             if (enemyBoard.ships == 0) {
-                System.out.println("YOU WIN");
-                System.exit(0);
+                scoreTxt.setStyle("-fx-font-size: 30px;");
+                scoreTxt.setText("You Win");
+
             }
 
             if (enemyTurn)
@@ -79,33 +124,106 @@ public class BattleshipMain extends Application {
                 return;
 
             Cell cell = (Cell) event.getSource();
-            if (playerBoard.placeShip(new Ship(shipsToPlace, event.getButton() == MouseButton.PRIMARY), cell.x, cell.y)) {
+            if (playerBoard.placeShip(new Ship(shipsToPlace, event.getButton() == MouseButton.PRIMARY), cell.x, cell.y, true)) {
                 if (--shipsToPlace == 0) {
+                    scoreTxt.setText("Game\nStarted");
                     startGame();
                 }
             }
         });
 
+
+
+        shipHover.setPrefSize(30, 150);
+        shipHover.setMaxSize(30, 150);
+
+        shipHover.getStyleClass().add("shipGeneral");
+        shipHover.getStyleClass().add("ship5v");
+
+        /* moves shipHover object with the mouse*/
+        basis.setOnMouseMoved(event -> {
+            double x = event.getX();
+            double y = event.getY();
+            shipHover.setTranslateX(x-15);
+            shipHover.setTranslateY(y+1);
+        });
+
+        /* Changing shipHover image and dimensions on scroll */
+        basis.setOnScroll(e -> {
+            if(!hPlacing){
+                shipHover.setPrefSize(150, 30);
+                shipHover.setMaxSize(150, 30);
+
+            }else {
+                shipHover.setPrefSize(30, 150);
+                shipHover.setMaxSize(30, 150);
+            }
+
+            BattleshipMain.shipHover.getStyleClass().remove("ship" + String.valueOf(shipsToPlace) + "v");
+            BattleshipMain.shipHover.getStyleClass().remove("ship" + String.valueOf(shipsToPlace));
+            BattleshipMain.shipHover.getStyleClass().add("ship" + String.valueOf(shipsToPlace) + (hPlacing? "v" : ""));
+
+            hPlacing = !hPlacing;
+
+        });
+
         VBox vbox = new VBox(50, enemyBoard, playerBoard);
         vbox.setAlignment(Pos.CENTER);
+        vbox.setPadding(new Insets(50));
 
         root.setCenter(vbox);
-        return root;
+        basis.setAlignment(Pos.TOP_LEFT);
+        basis.getChildren().addAll(root, shipHover);
+        return basis;
     }
 
     private void renderShips(ArrayList<Integer> shipList, BorderPane root) {
         int n=shipList.size();
         VBox sideBar = new VBox();
+        sideBar.setAlignment(Pos.CENTER);
+
+        HBox ships = new HBox();
+
+        sideBar.getStyleClass().add("sideBar");
+
+//        Font scoreFont = Font.loadFont(PATH + "fonts/SuperMario256.ttf", 45);
+//        Font font = Font.loadFont(PATH + "fonts/Boba Cups.ttf", 35);
+        Font scoreFont = Font.font("Tahoma", 20);
         for (int i=0;i<n;i++){
-            HBox ship =new HBox();
+            VBox ship =new VBox();
             for (int j = 1; j <= shipList.get(i);j++) {
                 ShipCell cell = new ShipCell();
+                cell.setOpacity(0);
                 ship.getChildren().add(cell);
+                ship.setAlignment(Pos.CENTER_LEFT);
             }
-            sideBar.getChildren().add(ship);
+
+//            ship.getStyleClass().add("ship" + String.valueOf(i+1));
+
+
+            ships.getChildren().add(ship);
         }
-        sideBar.setSpacing(50);
-        sideBar.setPadding(new Insets(200, 50, 0, 50));
+
+        StackPane score = new StackPane();
+        score.setPrefWidth(100);
+        score.setPrefHeight(400);
+
+        ImageView scoreIcon = new ImageView(new Image(PATH + "imgs/scoreBoard.png"));
+        scoreIcon.setFitWidth(150);
+        scoreIcon.setPreserveRatio(true);
+
+
+//        scoreTxt.setText(String.valueOf(scoreVal));
+        scoreTxt.setFont(scoreFont);
+        scoreTxt.setFill(Color.web("#ffffffbb"));
+        scoreTxt.setTextAlignment(TextAlignment.CENTER);
+
+        score.getChildren().addAll(scoreIcon, scoreTxt);
+
+        sideBar.getChildren().add(score);
+        sideBar.getChildren().add(ships);
+        sideBar.setSpacing(5);
+        sideBar.setPadding(new Insets(20));
 
         root.setRight(sideBar);
     }
@@ -122,21 +240,24 @@ public class BattleshipMain extends Application {
             enemyTurn = cell.shoot();
 
             if (playerBoard.ships == 0) {
-                System.out.println("YOU LOSE");
-                System.exit(0);
+                scoreTxt.setStyle("-fx-font-size: 30px;");
+                scoreTxt.setText("You Lost");
             }
         }
     }
 
     private void startGame() {
-        // place enemy ships
+        /* place enemy ships */
         int type = 5;
 
         while (type > 0) {
             int x = random.nextInt(10);
             int y = random.nextInt(10);
 
-            if (enemyBoard.placeShip(new Ship(type, Math.random() < 0.5), x, y)) {
+//            System.out.printf("%d %d\n", x, y);
+
+            if (enemyBoard.placeShip(new Ship(type, Math.random() < 0.5), x, y, false)) {
+//                System.out.printf("%d %d\n", x, y);
                 type--;
             }
         }
