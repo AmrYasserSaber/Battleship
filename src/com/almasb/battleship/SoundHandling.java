@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.net.URL;
 
 public class SoundHandling {
-    public static Void play(String path){
+    public static Void play(String path,int numberOfTimes){
         try {
             // Load sound effect
             URL soundURL = SoundHandling.class.getResource(path);
@@ -51,6 +51,11 @@ public class SoundHandling {
             });
             // Start playing the sound effect
             clip.start();
+            if (numberOfTimes == 0){
+                clip.loop(Clip.LOOP_CONTINUOUSLY);
+            }else {
+                clip.loop(numberOfTimes - 1);
+            }
         } catch (UnsupportedAudioFileException | LineUnavailableException | IOException e) {
             e.printStackTrace();
         }
