@@ -1,16 +1,16 @@
 package com.almasb.battleship;
 
+import java.io.File;
+import java.net.URL;
 import java.util.Objects;
 import java.util.Random;
 import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
@@ -18,12 +18,17 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.text.Font;
 
+import javax.sound.sampled.*;
+import java.io.File;
+import java.io.IOException;
+
+
 import com.almasb.battleship.Board.Cell;
+
 
 public class BattleshipMain extends Application {
 
@@ -33,7 +38,7 @@ public class BattleshipMain extends Application {
     public static int scoreVal = 0;
     Text scoreTxt = new Text(35, 75, "Map Out\nYour Strategy");
 
-    public final String PATH = "D:/projects/Battleship-main/Battleship-main/src/com/almasb/battleship/";
+    public final String path = System.getProperty("user.dir")+"/Battleship/src/com/almasb/battleship/";
 
     private boolean running = false;
     private Board enemyBoard;
@@ -45,9 +50,9 @@ public class BattleshipMain extends Application {
 
     public static boolean hPlacing = false;
 
-    private Random random = new Random();
+    private final Random random = new Random();
 
-
+    
     private  Parent createMainScene() {
         AnchorPane mainScene= new AnchorPane();
         mainScene.setPrefSize(600,800);
@@ -55,10 +60,10 @@ public class BattleshipMain extends Application {
         VBox menu = new VBox(50);
         menu.setPrefSize(600, 600);
 
-        Image logo = new Image(PATH + "imgs/gameLogo.png", 400, 153.5, true, true);
+        Image logo = new Image(path + "imgs/gameLogo.png", 400, 153.5, true, true);
         ImageView logoView = new ImageView(logo);
 
-        Image startBtn = new Image(PATH + "imgs/start.png", 200, 62, true, true);
+        Image startBtn = new Image(path + "imgs/start.png", 200, 62, true, true);
         ImageView startBtnView = new ImageView(startBtn);
 
         startBtnView.getStyleClass().add("startBtn");
@@ -66,10 +71,10 @@ public class BattleshipMain extends Application {
         menu.getChildren().addAll(logoView, startBtnView);
         menu.setAlignment(Pos.CENTER);
 
-//        StackPane.setAlignment(menu,Pos.CENTER);
         mainScene.getChildren().add(menu);
 
         startBtnView.setOnMouseClicked((MouseEvent event) -> {
+            SoundHandling.play("Sound effects/Click.wav",1);
             Parent root = createGame();
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Scene scene = new Scene(root);
@@ -80,12 +85,13 @@ public class BattleshipMain extends Application {
         return mainScene;
     }
     private Parent createGame() {
+        SoundHandling.play("Sound effects/test.wav",0);
         basis.setMinSize(600, 800);
         BorderPane root = new BorderPane();
         root.setPrefSize(600, 800);
         root.getStyleClass().add("gamePlay");
 
-        ArrayList<Integer> shipList = new ArrayList<Integer>(5);
+        ArrayList<Integer> shipList = new ArrayList<>(5);
         for (int i = 1; i <= 5; i++) {
             shipList.add(i);
         }
@@ -106,7 +112,6 @@ public class BattleshipMain extends Application {
                 scoreTxt.setStyle("-fx-font-size: 35px;");
                 scoreVal += 10;
                 scoreTxt.setText(String.valueOf(scoreVal));
-//                System.out.printf("score: %d \n enemy: %d \n", scoreVal, enemyBoard.ships);
             }
 
             if (enemyBoard.ships == 0) {
@@ -124,11 +129,10 @@ public class BattleshipMain extends Application {
                 return;
 
             Cell cell = (Cell) event.getSource();
-            if (playerBoard.placeShip(new Ship(shipsToPlace, event.getButton() == MouseButton.PRIMARY), cell.x, cell.y, true)) {
-                if (--shipsToPlace == 0) {
+            if (playerBoard.placeShip(new Ship(shipsToPlace, event.getButton() == MouseButton.PRIMARY), cell.x, cell.y, true) && (--shipsToPlace == 0)) {
                     scoreTxt.setText("Game\nStarted");
                     startGame();
-                }
+
             }
         });
 
@@ -159,9 +163,9 @@ public class BattleshipMain extends Application {
                 shipHover.setMaxSize(30, 150);
             }
 
-            BattleshipMain.shipHover.getStyleClass().remove("ship" + String.valueOf(shipsToPlace) + "v");
-            BattleshipMain.shipHover.getStyleClass().remove("ship" + String.valueOf(shipsToPlace));
-            BattleshipMain.shipHover.getStyleClass().add("ship" + String.valueOf(shipsToPlace) + (hPlacing? "v" : ""));
+            BattleshipMain.shipHover.getStyleClass().remove("ship" + shipsToPlace + "v");
+            BattleshipMain.shipHover.getStyleClass().remove("ship" + shipsToPlace);
+            BattleshipMain.shipHover.getStyleClass().add("ship" + shipsToPlace + (hPlacing? "v" : ""));
 
             hPlacing = !hPlacing;
 
@@ -186,9 +190,7 @@ public class BattleshipMain extends Application {
 
         sideBar.getStyleClass().add("sideBar");
 
-//        Font scoreFont = Font.loadFont(PATH + "fonts/SuperMario256.ttf", 45);
-//        Font font = Font.loadFont(PATH + "fonts/Boba Cups.ttf", 35);
-        Font scoreFont = Font.font("Tahoma", 20);
+        Font scoreFont = Font.font("Thoma", 20);
         for (int i=0;i<n;i++){
             VBox ship =new VBox();
             for (int j = 1; j <= shipList.get(i);j++) {
@@ -197,10 +199,6 @@ public class BattleshipMain extends Application {
                 ship.getChildren().add(cell);
                 ship.setAlignment(Pos.CENTER_LEFT);
             }
-
-//            ship.getStyleClass().add("ship" + String.valueOf(i+1));
-
-
             ships.getChildren().add(ship);
         }
 
@@ -208,12 +206,11 @@ public class BattleshipMain extends Application {
         score.setPrefWidth(100);
         score.setPrefHeight(400);
 
-        ImageView scoreIcon = new ImageView(new Image(PATH + "imgs/scoreBoard.png"));
+        ImageView scoreIcon = new ImageView(new Image(path + "imgs/scoreBoard.png"));
         scoreIcon.setFitWidth(150);
         scoreIcon.setPreserveRatio(true);
 
 
-//        scoreTxt.setText(String.valueOf(scoreVal));
         scoreTxt.setFont(scoreFont);
         scoreTxt.setFill(Color.web("#ffffffbb"));
         scoreTxt.setTextAlignment(TextAlignment.CENTER);
@@ -254,10 +251,8 @@ public class BattleshipMain extends Application {
             int x = random.nextInt(10);
             int y = random.nextInt(10);
 
-//            System.out.printf("%d %d\n", x, y);
 
             if (enemyBoard.placeShip(new Ship(type, Math.random() < 0.5), x, y, false)) {
-//                System.out.printf("%d %d\n", x, y);
                 type--;
             }
         }
@@ -266,7 +261,7 @@ public class BattleshipMain extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
         Scene scene = new Scene(createMainScene());
         primaryStage.setTitle("Battleship");
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("style.css")).toExternalForm());
