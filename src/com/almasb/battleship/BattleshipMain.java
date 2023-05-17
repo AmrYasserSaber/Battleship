@@ -1,5 +1,7 @@
 package com.almasb.battleship;
 
+import java.io.File;
+import java.net.URL;
 import java.util.Objects;
 import java.util.Random;
 import java.util.ArrayList;
@@ -20,7 +22,13 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.text.Font;
 
+import javax.sound.sampled.*;
+import java.io.File;
+import java.io.IOException;
+
+
 import com.almasb.battleship.Board.Cell;
+
 
 public class BattleshipMain extends Application {
 
@@ -44,7 +52,7 @@ public class BattleshipMain extends Application {
 
     private final Random random = new Random();
 
-
+    
     private  Parent createMainScene() {
         AnchorPane mainScene= new AnchorPane();
         mainScene.setPrefSize(600,800);
@@ -66,6 +74,7 @@ public class BattleshipMain extends Application {
         mainScene.getChildren().add(menu);
 
         startBtnView.setOnMouseClicked((MouseEvent event) -> {
+            SoundHandling.play("Sound effects/Click.wav");
             Parent root = createGame();
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Scene scene = new Scene(root);
@@ -76,6 +85,7 @@ public class BattleshipMain extends Application {
         return mainScene;
     }
     private Parent createGame() {
+        SoundHandling.play("Sound effects/test.wav");
         basis.setMinSize(600, 800);
         BorderPane root = new BorderPane();
         root.setPrefSize(600, 800);
