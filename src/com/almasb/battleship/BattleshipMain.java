@@ -74,7 +74,7 @@ public class BattleshipMain extends Application {
         mainScene.getChildren().add(menu);
 
         startBtnView.setOnMouseClicked((MouseEvent event) -> {
-            SoundHandling.play("Sound effects/Click.wav",1);
+            SoundHandling.play("Sounds/Click.wav",1);
             Parent root = createGame();
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Scene scene = new Scene(root);
