@@ -81,6 +81,7 @@ public class BattleshipMain extends Application {
         mainScene.getChildren().add(menu);
 
         startBtnView.setOnMouseClicked((MouseEvent event) -> {
+//            play the click sound
             click.play();
             Parent root = createGame();
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -134,7 +135,7 @@ public class BattleshipMain extends Application {
             if (enemyTurn) {
                 try {
                     enemyMove();
-                } catch (UnsupportedAudioFileException | LineUnavailableException | IOException e) {
+                } catch (UnsupportedAudioFileException | LineUnavailableException | IOException | InterruptedException e) {
                     throw new RuntimeException(e);
                 }
             }
@@ -241,15 +242,16 @@ public class BattleshipMain extends Application {
         root.setRight(sideBar);
     }
 
-    private void enemyMove() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
+    private void enemyMove() throws UnsupportedAudioFileException, LineUnavailableException, IOException, InterruptedException {
         while (enemyTurn) {
             int x = random.nextInt(10);
             int y = random.nextInt(10);
 
             Cell cell = playerBoard.getCell(x, y);
-            if (cell.wasShot)
+            if (cell.wasShot) {
                 continue;
-
+            }
+            Thread.sleep(100);
             enemyTurn = cell.shoot();
 
             if (playerBoard.ships == 0) {
