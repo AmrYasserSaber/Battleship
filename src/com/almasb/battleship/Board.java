@@ -1,5 +1,6 @@
 package com.almasb.battleship;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,8 +13,10 @@ import javafx.scene.layout.VBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import java.lang.reflect.Field;
-import com.almasb.battleship.BattleshipMain;
 
 public class Board extends Parent {
     private VBox rows = new VBox();
@@ -99,11 +102,11 @@ public class Board extends Parent {
                 /*----------------- -------------- ---------------------*/
 
                 /*-------------  Resetting CSS Settings to avoid overwriting issues -----------*/
-                BattleshipMain.shipHover.getStyleClass().remove("ship" + String.valueOf(length) + "v");
-                BattleshipMain.shipHover.getStyleClass().remove("ship" + String.valueOf(length));
+                BattleshipMain.shipHover.getStyleClass().remove("ship" + length + "v");
+                BattleshipMain.shipHover.getStyleClass().remove("ship" + length);
                 BattleshipMain.shipHover.setPrefSize(30, 150);
                 BattleshipMain.shipHover.setMaxSize(30, 150);
-                BattleshipMain.shipHover.getStyleClass().add("ship" + String.valueOf(length-1) + "v");
+                BattleshipMain.shipHover.getStyleClass().add("ship" + (length - 1) + "v");
                 /*------------- --------------------------------------------------- -----------*/
 
             }
@@ -235,13 +238,16 @@ public class Board extends Parent {
             setStrokeWidth(0);
         }
 
-        public boolean shoot() {
+        public boolean shoot() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
             wasShot = true;
             setFill(Color.BLACK);
             setOpacity(0.5);
 
             if (ship != null) {
                 ship.hit();
+                //        ship has been hit adding bomb sound
+                SoundHandling bomb = new SoundHandling("sounds/bomb.wav",1);
+                bomb.play();
                 setFill(Color.RED);
                 setOpacity(0.5);
                 if (!ship.isAlive()) {
@@ -249,7 +255,9 @@ public class Board extends Parent {
                 }
                 return true;
             }
-
+//          missed hit splashing sound
+            SoundHandling splash =new SoundHandling("sounds/splash.wav",1);
+            splash.play();
             return false;
         }
     }
