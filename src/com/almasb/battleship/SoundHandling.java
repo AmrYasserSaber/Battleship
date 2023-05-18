@@ -5,10 +5,16 @@ import java.io.IOException;
 import java.net.URL;
 
 public class SoundHandling {
-    public static void play(String path, int numberOfTimes){
+    private String path;
+    private final int numberOfTimes;
+    private Clip clip;
+    private URL soundURL;
+    public SoundHandling(String path,int numberOfTimes) throws UnsupportedAudioFileException, LineUnavailableException, IOException {
+        this.path = path;
+        this.numberOfTimes = numberOfTimes;
+        this.soundURL = SoundHandling.class.getResource(path);
         try {
             // Load sound effect
-            URL soundURL = SoundHandling.class.getResource(path);
             if (soundURL == null) {
                 throw new IllegalArgumentException("Sound file not found.");
             }
@@ -33,7 +39,7 @@ public class SoundHandling {
             }
 
             // Create clip
-            Clip clip = AudioSystem.getClip();
+            clip = AudioSystem.getClip();
             clip.open(audioInputStream);
 
             // Add a LineListener to perform cleanup operations when sound playback is complete
@@ -49,6 +55,12 @@ public class SoundHandling {
                     }
                 }
             });
+        } catch (UnsupportedAudioFileException | LineUnavailableException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void play(){
             // Start playing the sound effect
             clip.start();
             if (numberOfTimes == 0){
@@ -56,15 +68,9 @@ public class SoundHandling {
             }else {
                 clip.loop(numberOfTimes - 1);
             }
-        } catch (UnsupportedAudioFileException | LineUnavailableException | IOException e) {
-            e.printStackTrace();
-        }
     }
-    public static void stop() throws LineUnavailableException {
-        Clip clip = AudioSystem.getClip();
-        if (clip.isRunning()) {
-            clip.stop();
-            clip.close();
-        }
+    public  void stop()  {
+        clip.stop();
+        clip.close();
     }
 }
