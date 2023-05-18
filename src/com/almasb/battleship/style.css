@@ -33,7 +33,7 @@
 }
 
 .cell{
-    /*-fx-background-image: url("./imgs/cell.png");*/
+    -fx-background-image: url("./imgs/cell.png");
     -fx-background-color: #00000055;
     -fx-background-size: contain;
 }

@@ -67,7 +67,6 @@ public class BattleshipMain extends Application {
         VBox menu = new VBox(50);
         menu.setPrefSize(600, 600);
 
-        System.out.println(new File("style.css").toURI().toString());
 
         Image logo = new Image( path + "imgs/gameLogo.png", 400, 153.5, true, true);
         ImageView logoView = new ImageView(logo);
