@@ -38,7 +38,7 @@ public class BattleshipMain extends Application {
     public static int scoreVal = 0;
     Text scoreTxt = new Text(35, 75, "Map Out\nYour Strategy");
 
-    public final String path = System.getProperty("user.dir")+"/Battleship/src/com/almasb/battleship/";
+    public final String path = "file:" + System.getProperty("user.dir")+"/src/com/almasb/battleship/";
 
     private boolean running = false;
     private Board enemyBoard;
@@ -60,7 +60,9 @@ public class BattleshipMain extends Application {
         VBox menu = new VBox(50);
         menu.setPrefSize(600, 600);
 
-        Image logo = new Image(path + "imgs/gameLogo.png", 400, 153.5, true, true);
+        System.out.println(new File("style.css").toURI().toString());
+
+        Image logo = new Image( path + "imgs/gameLogo.png", 400, 153.5, true, true);
         ImageView logoView = new ImageView(logo);
 
         Image startBtn = new Image(path + "imgs/start.png", 200, 62, true, true);
