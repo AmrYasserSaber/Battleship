@@ -32,7 +32,7 @@ public class BattleshipMain extends Application {
     public static final String RESOURCE ="style.css";
 
     public static Pane shipHover = new Pane();
-    public static StackPane basis = new StackPane();
+    public static StackPane basis;
 
     public static int scoreVal = 0;
     Text scoreTxt = new Text(35, 75, "Map Out\nYour Strategy");
@@ -95,6 +95,7 @@ public class BattleshipMain extends Application {
         return mainScene;
     }
     private Parent createGame() {
+        basis = new StackPane();
         basis.setMinSize(600, 800);
         BorderPane root = new BorderPane();
         root.setPrefSize(600, 800);
@@ -213,6 +214,7 @@ public class BattleshipMain extends Application {
 
         root.setCenter(vbox);
         basis.setAlignment(Pos.TOP_LEFT);
+        basis.getChildren().clear();
         basis.getChildren().addAll(root, shipHover);
         return basis;
     }
