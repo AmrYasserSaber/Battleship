@@ -29,6 +29,8 @@ import com.almasb.battleship.Board.Cell;
 
 public class BattleshipMain extends Application {
 
+    public static final String RESOURCE ="style.css";
+
     public static Pane shipHover = new Pane();
     public static StackPane basis = new StackPane();
 
@@ -97,6 +99,14 @@ public class BattleshipMain extends Application {
         BorderPane root = new BorderPane();
         root.setPrefSize(600, 800);
         root.getStyleClass().add("gamePlay");
+        HBox topBar =new HBox();
+        Image home = new Image(path + "imgs/home.png", 45, 45, true, true);
+        ImageView homeView = new ImageView(home);
+        homeView.getStyleClass().add("startBtn");
+        topBar.getChildren().add(homeView);
+        topBar.setSpacing(10);
+        topBar.setPadding(new Insets(10,10,10,10));
+        root.setTop(topBar);
 
         ArrayList<Integer> shipList = new ArrayList<>(5);
         for (int i = 1; i <= 5; i++) {
