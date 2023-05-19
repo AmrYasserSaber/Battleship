@@ -53,13 +53,9 @@ public class BattleshipMain extends Application {
 
     private final SoundHandling theme = new SoundHandling("sounds/theme.wav",0);
     private final SoundHandling click = new SoundHandling("sounds/Click.wav",1);
-    private final  SoundHandling win = new SoundHandling("sounds/win.wav",0);
+    private final SoundHandling win = new SoundHandling("sounds/win.wav",0);
     private final SoundHandling lose = new SoundHandling("sounds/lose.wav",0);
     private final SoundHandling gamePlay = new SoundHandling("sounds/gamePlay.wav",0);
-
-    public BattleshipMain() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
-        //this constructor only exists to throw exceptions
-    }
 
     private  Parent createMainScene() {
         theme.play();
@@ -100,24 +96,6 @@ public class BattleshipMain extends Application {
         BorderPane root = new BorderPane();
         root.setPrefSize(600, 800);
         root.getStyleClass().add("gamePlay");
-        HBox topBar =new HBox();
-        Image home = new Image(path + "imgs/home.png", 45, 45, true, true);
-        ImageView homeView = new ImageView(home);
-        homeView.getStyleClass().add("startBtn");
-        topBar.getChildren().add(homeView);
-        topBar.setSpacing(10);
-        topBar.setPadding(new Insets(10,10,10,10));
-        root.setTop(topBar);
-        homeView.setOnMouseClicked((MouseEvent event) -> {
-            Parent main = createMainScene();
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            Scene scene = new Scene(main);
-            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource(RESOURCE)).toExternalForm());
-            stage.setScene(scene);
-            stage.show();
-        });
-
-
         ArrayList<Integer> shipList = new ArrayList<>(5);
         for (int i = 1; i <= 5; i++) {
             shipList.add(i);
@@ -155,7 +133,8 @@ public class BattleshipMain extends Application {
             if (enemyTurn) {
                 try {
                     enemyMove();
-                } catch (UnsupportedAudioFileException | LineUnavailableException | IOException | InterruptedException e) {
+
+                } catch (UnsupportedAudioFileException | LineUnavailableException | IOException e) {
                     throw new RuntimeException(e);
                 }
             }
@@ -263,7 +242,7 @@ public class BattleshipMain extends Application {
         root.setRight(sideBar);
     }
 
-    private void enemyMove() throws UnsupportedAudioFileException, LineUnavailableException, IOException, InterruptedException {
+    private void enemyMove() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
         while (enemyTurn) {
             int x = random.nextInt(10);
             int y = random.nextInt(10);
@@ -272,7 +251,6 @@ public class BattleshipMain extends Application {
             if (cell.wasShot) {
                 continue;
             }
-            Thread.sleep(100);
             enemyTurn = cell.shoot();
 
             if (playerBoard.ships == 0) {
@@ -285,7 +263,6 @@ public class BattleshipMain extends Application {
             }
         }
     }
-
     private void startGame(){
 //        stop the theme song and start the gameplay song
         theme.stop();

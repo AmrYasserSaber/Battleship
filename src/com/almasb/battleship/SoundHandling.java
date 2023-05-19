@@ -5,14 +5,13 @@ import java.io.IOException;
 import java.net.URL;
 
 public class SoundHandling {
-    private String path;
+
     private final int numberOfTimes;
     private Clip clip;
-    private URL soundURL;
-    public SoundHandling(String path,int numberOfTimes) throws UnsupportedAudioFileException, LineUnavailableException, IOException {
-        this.path = path;
+
+    public SoundHandling(String path,int numberOfTimes) {
         this.numberOfTimes = numberOfTimes;
-        this.soundURL = SoundHandling.class.getResource(path);
+        URL soundURL = SoundHandling.class.getResource(path);
         try {
             // Load sound effect
             if (soundURL == null) {
