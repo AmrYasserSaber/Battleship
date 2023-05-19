@@ -1,0 +1,91 @@
+.anchor-pane {
+    -fx-background-image: url("./imgs/startBack2.png"); /* Set the background image */
+    -fx-background-size: cover;
+}
+
+.gamePlay{
+     -fx-background-image: url("./imgs/startBack.png"); /* Set the background image */
+      -fx-background-size: cover;
+}
+
+.startBtn:hover {
+    -fx-scale-x: 1.1;
+    -fx-scale-y: 1.1;
+
+    transition: -fx-scale-x 0.5s ease,
+                -fx-scale-y 0.5s ease;
+}
+
+
+.test{
+    -fx-background-color: #ffffff22;
+    /*-fx-background-color: #00000088;*/
+}
+
+.sideBar{
+    -fx-background-color: #ffffff00;
+}
+
+.shipHover{/*
+    -fx-background-image: url("./imgs/5cell.png"); /* Set the background image */
+    -fx-background-size: contain;
+    -fx-opacity: 0.5;
+}
+
+.cell{
+    -fx-background-image: url("./imgs/cell.png");
+    -fx-background-color: #00000055;
+    -fx-background-size: contain;
+}
+
+
+.ship0{
+    -fx-background-image: none;
+}
+
+.shipGeneral{
+    -fx-background-size: contain;
+    -fx-background-repeat: no-repeat;
+    -fx-opacity: 0.85;
+}
+
+/* ships' image paths */
+
+.ship1{
+    -fx-background-image: url("./imgs/1cell.png");
+}
+.ship1v{
+    -fx-background-image: url("./imgs/1cellV.png");
+}
+
+
+.ship2{
+    -fx-background-image: url("./imgs/2cell.png");
+}
+.ship2v{
+    -fx-background-image: url("./imgs/2cellV.png");
+}
+
+
+.ship3{
+    -fx-background-image: url("./imgs/3cell.png");
+}
+.ship3v{
+    -fx-background-image: url("./imgs/3cellV.png");
+}
+
+
+.ship4{
+    -fx-background-image: url("./imgs/4cell.png");
+}
+.ship4v{
+    -fx-background-image: url("./imgs/4cellV.png");
+}
+
+
+.ship5{
+    -fx-background-image: url("./imgs/5cell.png");
+}
+.ship5v{
+    -fx-background-image: url("./imgs/5cellV.png");
+}

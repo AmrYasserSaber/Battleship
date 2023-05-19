@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="fonts">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/src/com/almasb/battleship/fonts/super_mario_256.zip!/" />
+      <root url="jar://$PROJECT_DIR$/src/com/almasb/battleship/fonts/boba_cups.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
