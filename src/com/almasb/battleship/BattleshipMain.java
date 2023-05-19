@@ -69,8 +69,7 @@ public class BattleshipMain extends Application {
         VBox menu = new VBox(50);
         menu.setPrefSize(600, 600);
 
-
-        Image logo = new Image( path + "imgs/gameLogo.png", 400, 153.5, true, true);
+        Image logo = new Image(path + "imgs/gameLogo.png", 400, 153.5, true, true);
         ImageView logoView = new ImageView(logo);
 
         Image startBtn = new Image(path + "imgs/start.png", 200, 62, true, true);
@@ -86,10 +85,10 @@ public class BattleshipMain extends Application {
         startBtnView.setOnMouseClicked((MouseEvent event) -> {
 //            play the click sound
             click.play();
-            Parent root = createGame();
+            Parent game = createGame();
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            Scene scene = new Scene(root);
-            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("style.css")).toExternalForm());
+            Scene scene = new Scene(game);
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource(RESOURCE)).toExternalForm());
             stage.setScene(scene);
             stage.show();
         });
@@ -108,6 +107,15 @@ public class BattleshipMain extends Application {
         topBar.setSpacing(10);
         topBar.setPadding(new Insets(10,10,10,10));
         root.setTop(topBar);
+        homeView.setOnMouseClicked((MouseEvent event) -> {
+            Parent main = createMainScene();
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene scene = new Scene(main);
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource(RESOURCE)).toExternalForm());
+            stage.setScene(scene);
+            stage.show();
+        });
+
 
         ArrayList<Integer> shipList = new ArrayList<>(5);
         for (int i = 1; i <= 5; i++) {
@@ -297,10 +305,10 @@ public class BattleshipMain extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws UnsupportedAudioFileException, LineUnavailableException, IOException {
+    public void start(Stage primaryStage){
         Scene scene = new Scene(createMainScene());
         primaryStage.setTitle("Battleship");
-        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("style.css")).toExternalForm());
+        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource(RESOURCE)).toExternalForm());
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
         primaryStage.show();
