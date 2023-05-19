@@ -35,7 +35,7 @@ public class BattleshipMain extends Application {
     public static int scoreVal = 0;
     Text scoreTxt = new Text(35, 75, "Map Out\nYour Strategy");
 
-    public final String path = "file:" + System.getProperty("user.dir")+"/src/com/almasb/battleship/";
+    public final String path = System.getProperty("user.dir")+"/Battleship/src/com/almasb/battleship/";
 
     private boolean running = false;
     private Board enemyBoard;
