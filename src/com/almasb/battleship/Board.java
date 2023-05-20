@@ -1,6 +1,5 @@
 package com.almasb.battleship;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,36 +11,14 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
-import java.lang.reflect.Field;
 
 public class Board extends Parent {
-    private VBox rows = new VBox();
-    private boolean enemy = false;
+    private final VBox rows = new VBox();
+    private final boolean enemy ;
     public int ships = 5;
 
-    public static void copyProperties(Object source, Object target) {
-        Class<?> sourceClass = source.getClass();
-        Class<?> targetClass = target.getClass();
 
-        // Get all fields from the source object
-        Field[] sourceFields = sourceClass.getDeclaredFields();
-
-        // Copy the value of each field to the corresponding field in the target object
-        for (Field sourceField : sourceFields) {
-            try {
-                Field targetField = targetClass.getDeclaredField(sourceField.getName());
-                sourceField.setAccessible(true);
-                targetField.setAccessible(true);
-                targetField.set(target, sourceField.get(source));
-            } catch (NoSuchFieldException | IllegalAccessException e) {
-                // Ignore fields that don't exist in the target object
-            }
-        }
-    }
 
     public Board(boolean enemy, EventHandler<? super MouseEvent> handler) {
         this.enemy = enemy;
@@ -58,7 +35,6 @@ public class Board extends Parent {
 
             rows.getChildren().add(row);
         }
-//        rows.getStyleClass().add("cell");
 
         getChildren().add(rows);
     }
@@ -67,8 +43,6 @@ public class Board extends Parent {
 
         if (canPlaceShip(ship, x, y)) {
             int length = ship.type;
-
-//            System.out.println(length);
             if(playerTurn){
 
                 double xBase = 35;
@@ -85,18 +59,6 @@ public class Board extends Parent {
 
                 BattleshipMain.basis.getChildren().add(lolD);
 
-                double xVal =  BattleshipMain.shipHover.getTranslateX();
-                double yVal =  BattleshipMain.shipHover.getTranslateY();
-
-
-//                System.out.printf("\n\n\n\n\n\n1: cellNum: %d %d \n", x, y);
-//
-//                System.out.printf("getCell: %f %f \n", getCell(x, y).getTranslateX(), getCell(x, y).getTranslateY());
-//                System.out.printf("predict: %f %f \n", eqX, eqY);
-//                System.out.printf("shipHover: %f %f \n", xVal, yVal);
-    //            getCell(x, y).getLayoutX();
-    //            getCell(x, y).getLayoutY();
-
 
 
                 /*----------------- -------------- ---------------------*/
@@ -110,7 +72,6 @@ public class Board extends Parent {
                 /*------------- --------------------------------------------------- -----------*/
 
             }
-//            System.out.println(BattleshipMain.hPlacing);
             /*here the condition depends on whether it's the player turn or not*/
             if ((playerTurn ? !BattleshipMain.hPlacing : ship.vertical)) {
 
@@ -153,13 +114,13 @@ public class Board extends Parent {
 
     private Cell[] getNeighbors(int x, int y) {
         Point2D[] points = new Point2D[] {
-                new Point2D(x - 1, y),
-                new Point2D(x + 1, y),
-                new Point2D(x, y - 1),
-                new Point2D(x, y + 1)
+                new Point2D((double) x - 1, y),
+                new Point2D((double) x + 1, y),
+                new Point2D(x,(double) y - 1),
+                new Point2D(x,(double) y + 1)
         };
 
-        List<Cell> neighbors = new ArrayList<Cell>();
+        List<Cell> neighbors = new ArrayList<>();
 
         for (Point2D p : points) {
             if (isValidPoint(p)) {
@@ -219,46 +180,5 @@ public class Board extends Parent {
 
     private boolean isValidPoint(double x, double y) {
         return x >= 0 && x < 10 && y >= 0 && y < 10;
-    }
-
-    public class Cell extends Rectangle {
-        public int x, y;
-        public Ship ship = null;
-        public boolean wasShot = false;
-
-        private Board board;
-
-        public Cell(int x, int y, Board board) {
-            super(30, 30);
-            this.x = x;
-            this.y = y;
-            this.board = board;
-            setFill(Color.LIGHTGRAY);
-            setStroke(Color.BLACK);
-            setStrokeWidth(0);
-        }
-
-        public boolean shoot() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
-            wasShot = true;
-            setFill(Color.BLACK);
-            setOpacity(0.5);
-
-            if (ship != null) {
-                ship.hit();
-                //        ship has been hit adding bomb sound
-                SoundHandling bomb = new SoundHandling("sounds/bomb.wav",1);
-                bomb.play();
-                setFill(Color.RED);
-                setOpacity(0.5);
-                if (!ship.isAlive()) {
-                    board.ships--;
-                }
-                return true;
-            }
-//          missed hit splashing sound
-            SoundHandling splash =new SoundHandling("sounds/splash.wav",1);
-            splash.play();
-            return false;
-        }
     }
 }

@@ -20,17 +20,12 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.text.Font;
 
-import javax.sound.sampled.*;
-import java.io.IOException;
-
-
-import com.almasb.battleship.Board.Cell;
-
-
 public class BattleshipMain extends Application {
 
+    public static final String RESOURCE ="style.css";
+
     public static Pane shipHover = new Pane();
-    public static StackPane basis = new StackPane();
+    public static StackPane basis;
 
     public static int scoreVal = 0;
     Text scoreTxt = new Text(35, 75, "Map Out\nYour Strategy");
@@ -51,13 +46,9 @@ public class BattleshipMain extends Application {
 
     private final SoundHandling theme = new SoundHandling("sounds/theme.wav",0);
     private final SoundHandling click = new SoundHandling("sounds/Click.wav",1);
-    private final  SoundHandling win = new SoundHandling("sounds/win.wav",0);
+    private final SoundHandling win = new SoundHandling("sounds/win.wav",0);
     private final SoundHandling lose = new SoundHandling("sounds/lose.wav",0);
     private final SoundHandling gamePlay = new SoundHandling("sounds/gamePlay.wav",0);
-
-    public BattleshipMain() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
-        //this constructor only exists to throw exceptions
-    }
 
     private  Parent createMainScene() {
         theme.play();
@@ -67,8 +58,7 @@ public class BattleshipMain extends Application {
         VBox menu = new VBox(50);
         menu.setPrefSize(600, 600);
 
-
-        Image logo = new Image( path + "imgs/gameLogo.png", 400, 153.5, true, true);
+        Image logo = new Image(path + "imgs/gameLogo.png", 400, 153.5, true, true);
         ImageView logoView = new ImageView(logo);
 
         Image startBtn = new Image(path + "imgs/start.png", 200, 62, true, true);
@@ -84,21 +74,21 @@ public class BattleshipMain extends Application {
         startBtnView.setOnMouseClicked((MouseEvent event) -> {
 //            play the click sound
             click.play();
-            Parent root = createGame();
+            Parent game = createGame();
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            Scene scene = new Scene(root);
-            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("style.css")).toExternalForm());
+            Scene scene = new Scene(game);
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource(RESOURCE)).toExternalForm());
             stage.setScene(scene);
             stage.show();
         });
         return mainScene;
     }
     private Parent createGame() {
+        basis = new StackPane();
         basis.setMinSize(600, 800);
         BorderPane root = new BorderPane();
         root.setPrefSize(600, 800);
         root.getStyleClass().add("gamePlay");
-
         ArrayList<Integer> shipList = new ArrayList<>(5);
         for (int i = 1; i <= 5; i++) {
             shipList.add(i);
@@ -112,11 +102,7 @@ public class BattleshipMain extends Application {
             Cell cell = (Cell) event.getSource();
             if (cell.wasShot)
                 return;
-            try {
-                enemyTurn = !cell.shoot();
-            } catch (UnsupportedAudioFileException | LineUnavailableException | IOException e) {
-                throw new RuntimeException(e);
-            }
+            enemyTurn = !cell.shoot();
 
             if(!enemyTurn){
                 scoreTxt.setStyle("-fx-font-size: 35px;");
@@ -134,11 +120,7 @@ public class BattleshipMain extends Application {
             }
 
             if (enemyTurn) {
-                try {
-                    enemyMove();
-                } catch (UnsupportedAudioFileException | LineUnavailableException | IOException | InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
+                enemyMove();
             }
         });
 
@@ -195,6 +177,7 @@ public class BattleshipMain extends Application {
 
         root.setCenter(vbox);
         basis.setAlignment(Pos.TOP_LEFT);
+        basis.getChildren().clear();
         basis.getChildren().addAll(root, shipHover);
         return basis;
     }
@@ -243,7 +226,7 @@ public class BattleshipMain extends Application {
         root.setRight(sideBar);
     }
 
-    private void enemyMove() throws UnsupportedAudioFileException, LineUnavailableException, IOException, InterruptedException {
+    private void enemyMove(){
         while (enemyTurn) {
             int x = random.nextInt(10);
             int y = random.nextInt(10);
@@ -252,7 +235,6 @@ public class BattleshipMain extends Application {
             if (cell.wasShot) {
                 continue;
             }
-            Thread.sleep(100);
             enemyTurn = cell.shoot();
 
             if (playerBoard.ships == 0) {
@@ -265,7 +247,6 @@ public class BattleshipMain extends Application {
             }
         }
     }
-
     private void startGame(){
 //        stop the theme song and start the gameplay song
         theme.stop();
@@ -287,10 +268,10 @@ public class BattleshipMain extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws UnsupportedAudioFileException, LineUnavailableException, IOException {
+    public void start(Stage primaryStage){
         Scene scene = new Scene(createMainScene());
         primaryStage.setTitle("Battleship");
-        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("style.css")).toExternalForm());
+        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource(RESOURCE)).toExternalForm());
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
         primaryStage.show();
