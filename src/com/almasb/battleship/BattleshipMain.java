@@ -24,7 +24,7 @@ public class BattleshipMain extends Application {
 
     public static final String RESOURCE ="style.css";
 
-    public static Pane shipHover = new Pane();
+    public static HoveringShip shipHover = new HoveringShip();
     public static StackPane basis;
 
     public static int scoreVal = 0;
@@ -135,15 +135,6 @@ public class BattleshipMain extends Application {
 
             }
         });
-
-
-
-        shipHover.setPrefSize(30, 150);
-        shipHover.setMaxSize(30, 150);
-
-        shipHover.getStyleClass().add("shipGeneral");
-        shipHover.getStyleClass().add("ship5v");
-
         /* moves shipHover object with the mouse*/
         basis.setOnMouseMoved(event -> {
             double x = event.getX();
@@ -154,21 +145,8 @@ public class BattleshipMain extends Application {
 
         /* Changing shipHover image and dimensions on scroll */
         basis.setOnScroll(e -> {
-            if(!hPlacing){
-                shipHover.setPrefSize(150, 30);
-                shipHover.setMaxSize(150, 30);
-
-            }else {
-                shipHover.setPrefSize(30, 150);
-                shipHover.setMaxSize(30, 150);
-            }
-
-            BattleshipMain.shipHover.getStyleClass().remove("ship" + shipsToPlace + "v");
-            BattleshipMain.shipHover.getStyleClass().remove("ship" + shipsToPlace);
-            BattleshipMain.shipHover.getStyleClass().add("ship" + shipsToPlace + (hPlacing? "v" : ""));
-
-            hPlacing = !hPlacing;
-
+            shipHover.rotate(hPlacing);
+            hPlacing = shipHover.changeStyling(hPlacing,shipsToPlace);
         });
 
         VBox vbox = new VBox(50, enemyBoard, playerBoard);
@@ -177,7 +155,6 @@ public class BattleshipMain extends Application {
 
         root.setCenter(vbox);
         basis.setAlignment(Pos.TOP_LEFT);
-        basis.getChildren().clear();
         basis.getChildren().addAll(root, shipHover);
         return basis;
     }
