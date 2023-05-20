@@ -64,17 +64,16 @@ public class Board extends Parent {
                 /*----------------- -------------- ---------------------*/
 
                 /*-------------  Resetting CSS Settings to avoid overwriting issues -----------*/
-                BattleshipMain.shipHover.getStyleClass().remove("ship" + length + "v");
-                BattleshipMain.shipHover.getStyleClass().remove("ship" + length);
+                BattleshipMain.shipHover.getStyleClass().remove("ship" + (length-1) + "v");
+                BattleshipMain.shipHover.getStyleClass().remove("ship" + (length-1));
                 BattleshipMain.shipHover.setPrefSize(30, 150);
                 BattleshipMain.shipHover.setMaxSize(30, 150);
-                BattleshipMain.shipHover.getStyleClass().add("ship" + (length - 1) + "v");
+                BattleshipMain.shipHover.getStyleClass().add("ship" + (length - 2) + "v");
                 /*------------- --------------------------------------------------- -----------*/
 
             }
             /*here the condition depends on whether it's the player turn or not*/
             if ((playerTurn ? !BattleshipMain.hPlacing : ship.vertical)) {
-
                 for (int i = y; i < y + length; i++) {
                     Cell cell = getCell(x, i);
                     cell.ship = ship;
@@ -108,7 +107,6 @@ public class Board extends Parent {
     }
 
     public Cell getCell(int x, int y) {
-
         return (Cell)((HBox)rows.getChildren().get(y)).getChildren().get(x);
     }
 
