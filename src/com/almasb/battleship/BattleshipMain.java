@@ -2,7 +2,6 @@ package com.almasb.battleship;
 
 import java.util.Objects;
 import java.util.Random;
-import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -72,7 +71,7 @@ public class BattleshipMain extends Application {
         mainScene.getChildren().add(menu);
 
         startBtnView.setOnMouseClicked((MouseEvent event) -> {
-//            play the click sound
+//          play the click sound
             click.play();
             Parent game = createGame();
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -89,11 +88,8 @@ public class BattleshipMain extends Application {
         BorderPane root = new BorderPane();
         root.setPrefSize(600, 800);
         root.getStyleClass().add("gamePlay");
-        ArrayList<Integer> shipList = new ArrayList<>(5);
-        for (int i = 1; i <= 5; i++) {
-            shipList.add(i);
-        }
-        renderShips(shipList,root);
+
+        sidebar(root);
 
         enemyBoard = new Board(true, event -> {
             if (!running)
@@ -111,7 +107,7 @@ public class BattleshipMain extends Application {
             }
 
             if (enemyBoard.ships == 0) {
-//                stop the gameplay sound
+//              stop the gameplay sound
                 gamePlay.stop();
 //              playing win sound
                 win.play();
@@ -182,47 +178,24 @@ public class BattleshipMain extends Application {
         return basis;
     }
 
-    private void renderShips(ArrayList<Integer> shipList, BorderPane root) {
-        int n=shipList.size();
+    private void sidebar(BorderPane root) {
         VBox sideBar = new VBox();
         sideBar.setAlignment(Pos.CENTER);
-
-        HBox ships = new HBox();
-
         sideBar.getStyleClass().add("sideBar");
-
-        Font scoreFont = Font.font("Thoma", 20);
-        for (int i=0;i<n;i++){
-            VBox ship =new VBox();
-            for (int j = 1; j <= shipList.get(i);j++) {
-                ShipCell cell = new ShipCell();
-                cell.setOpacity(0);
-                ship.getChildren().add(cell);
-                ship.setAlignment(Pos.CENTER_LEFT);
-            }
-            ships.getChildren().add(ship);
-        }
-
         StackPane score = new StackPane();
         score.setPrefWidth(100);
         score.setPrefHeight(400);
-
         ImageView scoreIcon = new ImageView(new Image(path + "imgs/scoreBoard.png"));
         scoreIcon.setFitWidth(150);
         scoreIcon.setPreserveRatio(true);
-
-
+        Font scoreFont = Font.font("Thoma", 20);
         scoreTxt.setFont(scoreFont);
         scoreTxt.setFill(Color.web("#ffffffbb"));
         scoreTxt.setTextAlignment(TextAlignment.CENTER);
-
         score.getChildren().addAll(scoreIcon, scoreTxt);
-
         sideBar.getChildren().add(score);
-        sideBar.getChildren().add(ships);
         sideBar.setSpacing(5);
         sideBar.setPadding(new Insets(20));
-
         root.setRight(sideBar);
     }
 

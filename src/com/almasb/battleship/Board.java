@@ -74,7 +74,6 @@ public class Board extends Parent {
             }
             /*here the condition depends on whether it's the player turn or not*/
             if ((playerTurn ? !BattleshipMain.hPlacing : ship.vertical)) {
-
                 for (int i = y; i < y + length; i++) {
                     Cell cell = getCell(x, i);
                     cell.ship = ship;
@@ -108,7 +107,6 @@ public class Board extends Parent {
     }
 
     public Cell getCell(int x, int y) {
-
         return (Cell)((HBox)rows.getChildren().get(y)).getChildren().get(x);
     }
 
