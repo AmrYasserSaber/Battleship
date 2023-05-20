@@ -20,13 +20,6 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.text.Font;
 
-import javax.sound.sampled.*;
-import java.io.IOException;
-
-
-import com.almasb.battleship.Board.Cell;
-
-
 public class BattleshipMain extends Application {
 
     public static final String RESOURCE ="style.css";
@@ -109,11 +102,7 @@ public class BattleshipMain extends Application {
             Cell cell = (Cell) event.getSource();
             if (cell.wasShot)
                 return;
-            try {
-                enemyTurn = !cell.shoot();
-            } catch (UnsupportedAudioFileException | LineUnavailableException | IOException e) {
-                throw new RuntimeException(e);
-            }
+            enemyTurn = !cell.shoot();
 
             if(!enemyTurn){
                 scoreTxt.setStyle("-fx-font-size: 35px;");
@@ -131,12 +120,7 @@ public class BattleshipMain extends Application {
             }
 
             if (enemyTurn) {
-                try {
-                    enemyMove();
-
-                } catch (UnsupportedAudioFileException | LineUnavailableException | IOException e) {
-                    throw new RuntimeException(e);
-                }
+                enemyMove();
             }
         });
 
@@ -242,7 +226,7 @@ public class BattleshipMain extends Application {
         root.setRight(sideBar);
     }
 
-    private void enemyMove() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
+    private void enemyMove(){
         while (enemyTurn) {
             int x = random.nextInt(10);
             int y = random.nextInt(10);

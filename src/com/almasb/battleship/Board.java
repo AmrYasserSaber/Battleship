@@ -1,6 +1,5 @@
 package com.almasb.battleship;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,10 +11,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
 
 
 public class Board extends Parent {
@@ -185,47 +180,5 @@ public class Board extends Parent {
 
     private boolean isValidPoint(double x, double y) {
         return x >= 0 && x < 10 && y >= 0 && y < 10;
-    }
-
-    public static class Cell extends Rectangle {
-        public int x;
-        public int y;
-        public Ship ship = null;
-        public boolean wasShot = false;
-
-        private final Board board;
-
-        public Cell(int x, int y, Board board) {
-            super(30, 30);
-            this.x = x;
-            this.y = y;
-            this.board = board;
-            setFill(Color.LIGHTGRAY);
-            setStroke(Color.BLACK);
-            setStrokeWidth(0);
-        }
-
-        public boolean shoot() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
-            wasShot = true;
-            setFill(Color.BLACK);
-            setOpacity(0.5);
-
-            if (ship != null) {
-                ship.hit();
-                //        ship has been hit adding bomb sound
-                SoundHandling bomb = new SoundHandling("sounds/bomb.wav",1);
-                bomb.play();
-                setFill(Color.RED);
-                setOpacity(0.5);
-                if (!ship.isAlive()) {
-                    board.ships--;
-                }
-                return true;
-            }
-//          missed hit splashing sound
-            SoundHandling splash =new SoundHandling("sounds/splash.wav",1);
-            splash.play();
-            return false;
-        }
     }
 }
