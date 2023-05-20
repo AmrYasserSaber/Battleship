@@ -102,11 +102,11 @@ public class Board extends Parent {
                 /*----------------- -------------- ---------------------*/
 
                 /*-------------  Resetting CSS Settings to avoid overwriting issues -----------*/
-                BattleshipMain.shipHover.getStyleClass().remove("ship" + length + "v");
-                BattleshipMain.shipHover.getStyleClass().remove("ship" + length);
+                BattleshipMain.shipHover.getStyleClass().remove("ship" + (length-1) + "v");
+                BattleshipMain.shipHover.getStyleClass().remove("ship" + (length-1));
                 BattleshipMain.shipHover.setPrefSize(30, 150);
                 BattleshipMain.shipHover.setMaxSize(30, 150);
-                BattleshipMain.shipHover.getStyleClass().add("ship" + (length - 1) + "v");
+                BattleshipMain.shipHover.getStyleClass().add("ship" + (length - 2) + "v");
                 /*------------- --------------------------------------------------- -----------*/
 
             }

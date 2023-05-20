@@ -41,7 +41,7 @@ public class BattleshipMain extends Application {
     private Board enemyBoard;
     private Board playerBoard;
 
-    private int shipsToPlace = 5;
+    private int shipsToPlace = 6;
 
     private boolean enemyTurn = false;
 
@@ -147,7 +147,7 @@ public class BattleshipMain extends Application {
                 return;
 
             Cell cell = (Cell) event.getSource();
-            if (playerBoard.placeShip(new Ship(shipsToPlace, event.getButton() == MouseButton.PRIMARY), cell.x, cell.y, true) && (--shipsToPlace == 0)) {
+            if (playerBoard.placeShip(new Ship(shipsToPlace, event.getButton() == MouseButton.PRIMARY), cell.x, cell.y, true) && (--shipsToPlace == 1)) {
                     scoreTxt.setText("Game\nStarted");
                 startGame();
 
@@ -271,9 +271,9 @@ public class BattleshipMain extends Application {
         theme.stop();
         gamePlay.play();
         /* place enemy ships */
-        int type = 5;
+        int type = 6;
 
-        while (type > 0) {
+        while (type > 1) {
             int x = random.nextInt(10);
             int y = random.nextInt(10);
 
