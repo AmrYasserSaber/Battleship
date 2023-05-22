@@ -141,11 +141,9 @@ public class BattleshipMain extends Application {
         });
 
         /* Changing shipHover image and dimensions on scroll */
-        basis.setOnMouseClicked(e -> {
-            if (e.getButton() == MouseButton.SECONDARY) {
+        basis.setOnScroll(e -> {
                 shipHover.rotate(hPlacing);
                 hPlacing = shipHover.changeStyling(hPlacing, shipsToPlace);
-            }
         });
 
         VBox vbox = new VBox(50, enemyBoard, playerBoard);
