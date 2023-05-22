@@ -8,7 +8,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -20,36 +19,41 @@ import javafx.scene.text.TextAlignment;
 import javafx.scene.text.Font;
 
 public class BattleshipMain extends Application {
+    public final String path = System.getProperty("user.dir")+"/Battleship/src/com/almasb/battleship/";
 
     public static final String RESOURCE ="style.css";
 
-    public static HoveringShip shipHover = new HoveringShip();
+    public static boolean hPlacing = false;
+
     public static StackPane basis;
 
     public static int scoreVal = 0;
-    Text scoreTxt = new Text(35, 75, "Map Out\nYour Strategy");
 
-    public final String path = "file:" + System.getProperty("user.dir")+"/src/com/almasb/battleship/";
+    public static HoveringShip shipHover = new HoveringShip();
 
-
+    private final Random random = new Random();
     private boolean running = false;
+
     private Board enemyBoard;
+
     private Board playerBoard;
+
 
     private int shipsToPlace = 6;
 
+
     private boolean enemyTurn = false;
 
-    public static boolean hPlacing = false;
 
-    private final Random random = new Random();
+    Text scoreTxt = new Text(35, 75, "Map Out\nYour Strategy");
 
+    //    SoundHandling objects
     private final SoundHandling theme = new SoundHandling("sounds/theme.wav",0);
     private final SoundHandling click = new SoundHandling("sounds/Click.wav",1);
     private final SoundHandling win = new SoundHandling("sounds/win.wav",0);
     private final SoundHandling lose = new SoundHandling("sounds/lose.wav",0);
     private final SoundHandling gamePlay = new SoundHandling("sounds/gamePlay.wav",0);
-
+//-----------
     private  Parent createMainScene() {
         theme.play();
         AnchorPane mainScene= new AnchorPane();
@@ -126,7 +130,7 @@ public class BattleshipMain extends Application {
                 return;
 
             Cell cell = (Cell) event.getSource();
-            if (playerBoard.placeShip(new Ship(shipsToPlace, event.getButton() == MouseButton.PRIMARY), cell.x, cell.y, true) && (--shipsToPlace == 1)) {
+            if (playerBoard.placeShip(new Ship(shipsToPlace, !hPlacing), cell.x, cell.y, true) && (--shipsToPlace == 1)) {
                     scoreTxt.setText("Game\nStarted");
                 startGame();
 
@@ -187,6 +191,11 @@ public class BattleshipMain extends Application {
                 continue;
             }
             enemyTurn = cell.shoot();
+            if(enemyTurn){
+                scoreTxt.setStyle("-fx-font-size: 35px;");
+                scoreVal-=5;
+                scoreTxt.setText(String.valueOf(scoreVal));
+            }
 
             if (playerBoard.ships == 0) {
 //                stop the gameplay sound

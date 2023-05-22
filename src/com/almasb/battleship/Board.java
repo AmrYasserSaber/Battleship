@@ -40,13 +40,9 @@ public class Board extends Parent {
     }
 
     public boolean placeShip(Ship ship, int x, int y, boolean playerTurn) {
-
-
-
         if (canPlaceShip(ship, x, y)) {
             int length = ship.type;
             if(playerTurn){
-
                 double xBase = 35;
                 double yBase = 425;
                 /*-----------------Placing the image---------------------*/
@@ -98,10 +94,7 @@ public class Board extends Parent {
                     }
                 }
             }
-
             BattleshipMain.hPlacing = false;
-
-
 
             return true;
         }
