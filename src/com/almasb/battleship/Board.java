@@ -41,6 +41,8 @@ public class Board extends Parent {
 
     public boolean placeShip(Ship ship, int x, int y, boolean playerTurn) {
 
+
+
         if (canPlaceShip(ship, x, y)) {
             int length = ship.type;
             if(playerTurn){
@@ -52,7 +54,7 @@ public class Board extends Parent {
                 lolD.getStyleClass().addAll(BattleshipMain.shipHover.getStyleClass());
                 lolD.setPrefSize(BattleshipMain.shipHover.getWidth(), BattleshipMain.shipHover.getHeight());
                 lolD.setMaxSize(BattleshipMain.shipHover.getWidth(), BattleshipMain.shipHover.getHeight());
-                double eqX = xBase + 30 * x + (BattleshipMain.hPlacing ? 17 : 15);
+                double eqX = xBase + 30 * x + (BattleshipMain.hPlacing ? 17 : 18);
                 lolD.setTranslateX(eqX);
                 double eqY = yBase + 30 * y + (BattleshipMain.hPlacing ? 4 : 0);
                 lolD.setTranslateY(eqY);
@@ -64,11 +66,11 @@ public class Board extends Parent {
                 /*----------------- -------------- ---------------------*/
 
                 /*-------------  Resetting CSS Settings to avoid overwriting issues -----------*/
-                BattleshipMain.shipHover.getStyleClass().remove("ship" + (length-1) + "v");
-                BattleshipMain.shipHover.getStyleClass().remove("ship" + (length-1));
-                BattleshipMain.shipHover.setPrefSize(30, 150);
-                BattleshipMain.shipHover.setMaxSize(30, 150);
-                BattleshipMain.shipHover.getStyleClass().add("ship" + (length - 2) + "v");
+                BattleshipMain.shipHover.getStyleClass().remove("ship" + (length) + "v");
+                BattleshipMain.shipHover.getStyleClass().remove("ship" + (length));
+                BattleshipMain.shipHover.setPrefSize(30, 180);
+                BattleshipMain.shipHover.setMaxSize(30, 180);
+                BattleshipMain.shipHover.getStyleClass().add("ship" + (length - 1) + "v");
                 /*------------- --------------------------------------------------- -----------*/
 
             }
@@ -97,8 +99,9 @@ public class Board extends Parent {
                 }
             }
 
-
             BattleshipMain.hPlacing = false;
+
+
 
             return true;
         }

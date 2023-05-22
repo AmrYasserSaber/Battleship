@@ -52,10 +52,14 @@
 /* ships' image paths */
 
 .ship1{
-    -fx-background-image: url("./imgs/1cell.png");
+   -fx-background-size: contain;
+       -fx-background-repeat: no-repeat;
+       -fx-opacity: 0.85;
 }
 .ship1v{
-    -fx-background-image: url("./imgs/1cellV.png");
+    -fx-background-size: contain;
+        -fx-background-repeat: no-repeat;
+        -fx-opacity: 0.85;
 }
 
 
