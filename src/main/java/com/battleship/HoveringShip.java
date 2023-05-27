@@ -1,4 +1,4 @@
-package com.almasb.battleship;
+package com.battleship;
 
 import javafx.scene.layout.Pane;
 

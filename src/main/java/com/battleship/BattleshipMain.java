@@ -1,4 +1,4 @@
-package com.almasb.battleship;
+package com.battleship;
 
 import java.util.Objects;
 import java.util.Random;
@@ -19,7 +19,7 @@ import javafx.scene.text.TextAlignment;
 import javafx.scene.text.Font;
 
 public class BattleshipMain extends Application {
-    public final String path = System.getProperty("user.dir")+"/Battleship/src/com/almasb/battleship/";
+    public final String path = System.getProperty("user.dir")+"/src/main/resources/com/battleship/";
 
     public static final String RESOURCE ="style.css";
 
@@ -61,7 +61,6 @@ public class BattleshipMain extends Application {
         mainScene.getStyleClass().add("anchor-pane");
         VBox menu = new VBox(50);
         menu.setPrefSize(600, 600);
-
         Image logo = new Image(path + "imgs/gameLogo.png", 400, 153.5, true, true);
         ImageView logoView = new ImageView(logo);
 
@@ -131,7 +130,7 @@ public class BattleshipMain extends Application {
 
             Cell cell = (Cell) event.getSource();
             if (playerBoard.placeShip(new Ship(shipsToPlace, !hPlacing), cell.x, cell.y, true) && (--shipsToPlace == 1)) {
-                    scoreTxt.setText("Game\nStarted");
+                scoreTxt.setText("Game\nStarted");
                 startGame();
 
             }
@@ -146,8 +145,8 @@ public class BattleshipMain extends Application {
 
         /* Changing shipHover image and dimensions on scroll */
         basis.setOnScroll(e -> {
-                shipHover.rotate(hPlacing);
-                hPlacing = shipHover.changeStyling(hPlacing, shipsToPlace);
+            shipHover.rotate(hPlacing);
+            hPlacing = shipHover.changeStyling(hPlacing, shipsToPlace);
         });
 
         VBox vbox = new VBox(50, enemyBoard, playerBoard);

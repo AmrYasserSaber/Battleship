@@ -1,4 +1,4 @@
-package com.almasb.battleship;
+package com.battleship;
 
 import javax.sound.sampled.*;
 import java.io.IOException;
@@ -15,7 +15,7 @@ public class SoundHandling {
         try {
             // Load sound effect
             if (soundURL == null) {
-                throw new IllegalArgumentException("Sound file not found.");
+                throw new IllegalArgumentException("file not found");
             }
 
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(soundURL);
