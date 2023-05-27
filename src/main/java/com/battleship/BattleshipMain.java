@@ -10,16 +10,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
-import javafx.scene.text.Font;
 
 public class BattleshipMain extends Application {
-    public final String path = System.getProperty("user.dir")+"/src/main/resources/com/battleship/";
+    public static final String PATH = System.getProperty("user.dir")+"/src/main/resources/com/battleship/";
 
     public static final String RESOURCE ="style.css";
 
@@ -27,7 +23,6 @@ public class BattleshipMain extends Application {
 
     public static StackPane basis;
 
-    public static int scoreVal = 0;
 
     public static HoveringShip shipHover = new HoveringShip();
 
@@ -43,9 +38,8 @@ public class BattleshipMain extends Application {
 
 
     private boolean enemyTurn = false;
+    public Sidebar sidebar = new Sidebar();
 
-
-    Text scoreTxt = new Text(35, 75, "Map Out\nYour Strategy");
 
     //    SoundHandling objects
     private final SoundHandling theme = new SoundHandling("sounds/theme.wav",0);
@@ -61,10 +55,10 @@ public class BattleshipMain extends Application {
         mainScene.getStyleClass().add("anchor-pane");
         VBox menu = new VBox(50);
         menu.setPrefSize(600, 600);
-        Image logo = new Image(path + "imgs/gameLogo.png", 400, 153.5, true, true);
+        Image logo = new Image(PATH + "imgs/gameLogo.png", 400, 153.5, true, true);
         ImageView logoView = new ImageView(logo);
 
-        Image startBtn = new Image(path + "imgs/start.png", 200, 62, true, true);
+        Image startBtn = new Image(PATH + "imgs/start.png", 200, 62, true, true);
         ImageView startBtnView = new ImageView(startBtn);
 
         startBtnView.getStyleClass().add("startBtn");
@@ -93,7 +87,8 @@ public class BattleshipMain extends Application {
         root.setPrefSize(600, 800);
         root.getStyleClass().add("gamePlay");
 
-        sidebar(root);
+
+        root.setRight(sidebar);
 
         enemyBoard = new Board(true, event -> {
             if (!running)
@@ -105,9 +100,9 @@ public class BattleshipMain extends Application {
             enemyTurn = !cell.shoot();
 
             if(!enemyTurn){
-                scoreTxt.setStyle("-fx-font-size: 35px;");
-                scoreVal += 10;
-                scoreTxt.setText(String.valueOf(scoreVal));
+                sidebar.setScorestyle("-fx-font-size: 35px;");
+                sidebar.setScoreVal(sidebar.getScoreVal()+5);
+                sidebar.setScoreTxt(String.valueOf(sidebar.getScoreVal()));
             }
 
             if (enemyBoard.ships == 0) {
@@ -115,8 +110,8 @@ public class BattleshipMain extends Application {
                 gamePlay.stop();
 //              playing win sound
                 win.play();
-                scoreTxt.setStyle("-fx-font-size: 30px;");
-                scoreTxt.setText("You Win");
+                sidebar.setScorestyle("-fx-font-size: 30px;");
+                sidebar.setScoreTxt("You Win");
             }
 
             if (enemyTurn) {
@@ -130,7 +125,7 @@ public class BattleshipMain extends Application {
 
             Cell cell = (Cell) event.getSource();
             if (playerBoard.placeShip(new Ship(shipsToPlace, !hPlacing), cell.x, cell.y, true) && (--shipsToPlace == 1)) {
-                scoreTxt.setText("Game\nStarted");
+                sidebar.setScoreTxt("Game\nStarted");
                 startGame();
 
             }
@@ -159,26 +154,6 @@ public class BattleshipMain extends Application {
         return basis;
     }
 
-    private void sidebar(BorderPane root) {
-        VBox sideBar = new VBox();
-        sideBar.setAlignment(Pos.CENTER);
-        sideBar.getStyleClass().add("sideBar");
-        StackPane score = new StackPane();
-        score.setPrefWidth(100);
-        score.setPrefHeight(400);
-        ImageView scoreIcon = new ImageView(new Image(path + "imgs/scoreBoard.png"));
-        scoreIcon.setFitWidth(150);
-        scoreIcon.setPreserveRatio(true);
-        Font scoreFont = Font.font("Thoma", 20);
-        scoreTxt.setFont(scoreFont);
-        scoreTxt.setFill(Color.web("#ffffffbb"));
-        scoreTxt.setTextAlignment(TextAlignment.CENTER);
-        score.getChildren().addAll(scoreIcon, scoreTxt);
-        sideBar.getChildren().add(score);
-        sideBar.setSpacing(5);
-        sideBar.setPadding(new Insets(20));
-        root.setRight(sideBar);
-    }
 
     private void enemyMove(){
         while (enemyTurn) {
@@ -191,9 +166,9 @@ public class BattleshipMain extends Application {
             }
             enemyTurn = cell.shoot();
             if(enemyTurn){
-                scoreTxt.setStyle("-fx-font-size: 35px;");
-                scoreVal-=5;
-                scoreTxt.setText(String.valueOf(scoreVal));
+                sidebar.setScorestyle("-fx-font-size: 35px;");
+                sidebar.setScoreVal(sidebar.getScoreVal()-5);
+                sidebar.setScoreTxt(String.valueOf(sidebar.getScoreVal()));
             }
 
             if (playerBoard.ships == 0) {
@@ -201,8 +176,8 @@ public class BattleshipMain extends Application {
                 gamePlay.stop();
 //                playing lose sound
                 lose.play();
-                scoreTxt.setStyle("-fx-font-size: 30px;");
-                scoreTxt.setText("You Lost");
+                sidebar.setScorestyle("-fx-font-size: 30px;");
+                sidebar.setScoreTxt("You Lost");
             }
         }
     }
