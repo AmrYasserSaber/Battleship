@@ -13,24 +13,24 @@ import javafx.stage.Stage;
 import java.util.Objects;
 
 public class MainScene extends AnchorPane {
-    public static Game game = new Game();
     public VBox menu = new VBox(50);
-    private final String PATH = System.getProperty("user.dir")+"/src/main/resources/com/battleship/";
     public static final String RESOURCE ="style.css";
     private final SoundHandling click = new SoundHandling("sounds/Click.wav",1);
+    private final SoundHandling gamePlay = new SoundHandling("sounds/gamePlay.wav",0);
     public MainScene() {
         this.setPrefSize(600,800);
         this.getStyleClass().add("anchor-pane");
         menu.setPrefSize(600, 600);
-        Image logo = new Image(PATH + "imgs/gameLogo.png", 400, 153.5, true, true);
+        Image logo = new Image(Utils.PATH + "imgs/gameLogo.png", 400, 153.5, true, true);
         ImageView logoView = new ImageView(logo);
-        Image startBtn = new Image(PATH + "imgs/start.png", 200, 62, true, true);
+        Image startBtn = new Image(Utils.PATH + "imgs/start.png", 200, 62, true, true);
         ImageView startBtnView = new ImageView(startBtn);
         startBtnView.getStyleClass().add("startBtn");
         menu.getChildren().addAll(logoView, startBtnView);
         menu.setAlignment(Pos.CENTER);
         this.getChildren().add(menu);
         startBtnView.setOnMouseClicked((MouseEvent event) -> {
+            Game game = new Game(gamePlay);
 //          play the click sound
             click.play();
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -39,5 +39,6 @@ public class MainScene extends AnchorPane {
             stage.setScene(scene);
             stage.show();
         });
+
     }
 }

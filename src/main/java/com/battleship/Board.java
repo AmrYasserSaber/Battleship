@@ -42,34 +42,6 @@ public class Board extends Parent {
     public boolean placeShip(Ship ship, int x, int y, boolean playerTurn) {
         if (canPlaceShip(ship, x, y)) {
             int length = ship.type;
-            if(playerTurn){
-                double xBase = 35;
-                double yBase = 425;
-                /*-----------------Placing the image---------------------*/
-                Pane lolD = new Pane();
-                lolD.getStyleClass().addAll(Game.shipHover.getStyleClass());
-                lolD.setPrefSize(Game.shipHover.getWidth(), Game.shipHover.getHeight());
-                lolD.setMaxSize(Game.shipHover.getWidth(), Game.shipHover.getHeight());
-                double eqX = xBase + 30 * x + (Game.hPlacing ? 17 : 18);
-                lolD.setTranslateX(eqX);
-                double eqY = yBase + 30 * y + (Game.hPlacing ? 4 : 0);
-                lolD.setTranslateY(eqY);
-
-                MainScene.game.getChildren().add(lolD);
-
-
-
-                /*----------------- -------------- ---------------------*/
-
-                /*-------------  Resetting CSS Settings to avoid overwriting issues -----------*/
-                Game.shipHover.getStyleClass().remove("ship" + (length) + "v");
-                Game.shipHover.getStyleClass().remove("ship" + (length));
-                Game.shipHover.setPrefSize(30, 180);
-                Game.shipHover.setMaxSize(30, 180);
-                Game.shipHover.getStyleClass().add("ship" + (length - 1) + "v");
-                /*------------- --------------------------------------------------- -----------*/
-
-            }
             /*here the condition depends on whether it's the player turn or not*/
             if ((playerTurn ? !Game.hPlacing : ship.vertical)) {
                 for (int i = y; i < y + length; i++) {
@@ -94,13 +66,37 @@ public class Board extends Parent {
                     }
                 }
             }
-            Game.hPlacing = false;
-
             return true;
         }
-
         return false;
     }
+    public HoveringShip copyHoveringShip(HoveringShip shipHover, int x, int y){
+        int length = shipHover.getType();
+        HoveringShip copy=new HoveringShip(length);
+//      -----------  handling copy styling--------------------------------------
+        copy.getStyleClass().clear();
+        copy.getStyleClass().add("shipGeneral");
+        if(Game.hPlacing){
+            copy.getStyleClass().add("ship"+length);
+            copy.setPrefSize(180, 30);
+            copy.setMaxSize(180, 30);
+        }
+        else {
+            copy.getStyleClass().add("ship"+length+"v");
+            copy.setPrefSize(30, 180);
+            copy.setMaxSize(30, 180);
+        }
+//        ----------------------------------------------
+        double xBase = 35;
+        double yBase = 425;
+        double eqX = xBase + 30 * x + (Game.hPlacing ? 17 : 18);
+        copy.setTranslateX(eqX);
+        double eqY = yBase + 30 * y + (Game.hPlacing ? 4 : 0);
+        copy.setTranslateY(eqY);
+
+        return copy;
+    }
+
 
     public Cell getCell(int x, int y) {
         return (Cell)((HBox)rows.getChildren().get(y)).getChildren().get(x);
