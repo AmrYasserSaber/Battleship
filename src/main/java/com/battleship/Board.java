@@ -47,31 +47,31 @@ public class Board extends Parent {
                 double yBase = 425;
                 /*-----------------Placing the image---------------------*/
                 Pane lolD = new Pane();
-                lolD.getStyleClass().addAll(BattleshipMain.shipHover.getStyleClass());
-                lolD.setPrefSize(BattleshipMain.shipHover.getWidth(), BattleshipMain.shipHover.getHeight());
-                lolD.setMaxSize(BattleshipMain.shipHover.getWidth(), BattleshipMain.shipHover.getHeight());
-                double eqX = xBase + 30 * x + (BattleshipMain.hPlacing ? 17 : 18);
+                lolD.getStyleClass().addAll(Game.shipHover.getStyleClass());
+                lolD.setPrefSize(Game.shipHover.getWidth(), Game.shipHover.getHeight());
+                lolD.setMaxSize(Game.shipHover.getWidth(), Game.shipHover.getHeight());
+                double eqX = xBase + 30 * x + (Game.hPlacing ? 17 : 18);
                 lolD.setTranslateX(eqX);
-                double eqY = yBase + 30 * y + (BattleshipMain.hPlacing ? 4 : 0);
+                double eqY = yBase + 30 * y + (Game.hPlacing ? 4 : 0);
                 lolD.setTranslateY(eqY);
 
-                BattleshipMain.game.getChildren().add(lolD);
+                MainScene.game.getChildren().add(lolD);
 
 
 
                 /*----------------- -------------- ---------------------*/
 
                 /*-------------  Resetting CSS Settings to avoid overwriting issues -----------*/
-                BattleshipMain.shipHover.getStyleClass().remove("ship" + (length) + "v");
-                BattleshipMain.shipHover.getStyleClass().remove("ship" + (length));
-                BattleshipMain.shipHover.setPrefSize(30, 180);
-                BattleshipMain.shipHover.setMaxSize(30, 180);
-                BattleshipMain.shipHover.getStyleClass().add("ship" + (length - 1) + "v");
+                Game.shipHover.getStyleClass().remove("ship" + (length) + "v");
+                Game.shipHover.getStyleClass().remove("ship" + (length));
+                Game.shipHover.setPrefSize(30, 180);
+                Game.shipHover.setMaxSize(30, 180);
+                Game.shipHover.getStyleClass().add("ship" + (length - 1) + "v");
                 /*------------- --------------------------------------------------- -----------*/
 
             }
             /*here the condition depends on whether it's the player turn or not*/
-            if ((playerTurn ? !BattleshipMain.hPlacing : ship.vertical)) {
+            if ((playerTurn ? !Game.hPlacing : ship.vertical)) {
                 for (int i = y; i < y + length; i++) {
                     Cell cell = getCell(x, i);
                     cell.ship = ship;
@@ -94,7 +94,7 @@ public class Board extends Parent {
                     }
                 }
             }
-            BattleshipMain.hPlacing = false;
+            Game.hPlacing = false;
 
             return true;
         }

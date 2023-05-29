@@ -16,6 +16,8 @@ public class Game extends StackPane {
     private boolean enemyTurn = false;
     private final Random random = new Random();
     private int shipsToPlace = 6;
+    public static HoveringShip shipHover = new HoveringShip();
+    public static boolean hPlacing = false;
     //    SoundHandling objects
     public final  SoundHandling theme = new SoundHandling("sounds/theme.wav",0);
     private final SoundHandling win = new SoundHandling("sounds/win.wav",0);
@@ -61,7 +63,7 @@ public class Game extends StackPane {
                 return;
 
             Cell cell = (Cell) event.getSource();
-            if (playerBoard.placeShip(new Ship(shipsToPlace, !BattleshipMain.hPlacing), cell.x, cell.y, true) && (--shipsToPlace == 1)) {
+            if (playerBoard.placeShip(new Ship(shipsToPlace, !Game.hPlacing), cell.x, cell.y, true) && (--shipsToPlace == 1)) {
                 sidebar.setScoreTxt("Game\nStarted");
                 startGame();
 
@@ -71,20 +73,20 @@ public class Game extends StackPane {
         this.setOnMouseMoved(event -> {
             double x = event.getX();
             double y = event.getY();
-            BattleshipMain.shipHover.setTranslateX(x-15);
-            BattleshipMain.shipHover.setTranslateY(y+1);
+            Game.shipHover.setTranslateX(x-15);
+            Game.shipHover.setTranslateY(y+1);
         });
         /* Changing shipHover image and dimensions on scroll */
         this.setOnScroll(e -> {
-            BattleshipMain.shipHover.rotate(BattleshipMain.hPlacing);
-            BattleshipMain.hPlacing = BattleshipMain.shipHover.changeStyling(BattleshipMain.hPlacing, shipsToPlace);
+            Game.shipHover.rotate(Game.hPlacing);
+            Game.hPlacing = Game.shipHover.changeStyling(Game.hPlacing, shipsToPlace);
         });
         VBox boardsBox = new VBox(50, enemyBoard, playerBoard);
         boardsBox.setAlignment(Pos.CENTER);
         boardsBox.setPadding(new Insets(50));
         root.setCenter(boardsBox);
         this.setAlignment(Pos.TOP_LEFT);
-        this.getChildren().addAll(root, BattleshipMain.shipHover);
+        this.getChildren().addAll(root, Game.shipHover);
     }
     private void enemyMove(){
         while (enemyTurn) {
