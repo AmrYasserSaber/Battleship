@@ -55,7 +55,7 @@ public class Board extends Parent {
                 double eqY = yBase + 30 * y + (BattleshipMain.hPlacing ? 4 : 0);
                 lolD.setTranslateY(eqY);
 
-                BattleshipMain.basis.getChildren().add(lolD);
+                BattleshipMain.game.getChildren().add(lolD);
 
 
 

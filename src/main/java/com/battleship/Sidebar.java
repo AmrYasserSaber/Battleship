@@ -21,7 +21,7 @@ public class Sidebar extends VBox {
         StackPane score = new StackPane();
         score.setPrefWidth(100);
         score.setPrefHeight(400);
-        ImageView scoreIcon = new ImageView(new Image(BattleshipMain.path + "imgs/scoreBoard.png"));
+        ImageView scoreIcon = new ImageView(new Image(BattleshipMain.PATH + "imgs/scoreBoard.png"));
         scoreIcon.setFitWidth(150);
         scoreIcon.setPreserveRatio(true);
         Font scoreFont = Font.font("Thoma", 20);
