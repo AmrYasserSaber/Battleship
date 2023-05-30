@@ -9,7 +9,6 @@ import javafx.scene.Parent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
 
@@ -39,11 +38,11 @@ public class Board extends Parent {
         getChildren().add(rows);
     }
 
-    public boolean placeShip(Ship ship, int x, int y, boolean playerTurn) {
+    public boolean placeShip(Ship ship, int x, int y, boolean playerTurn,boolean hPlacing) {
         if (canPlaceShip(ship, x, y)) {
             int length = ship.type;
             /*here the condition depends on whether it's the player turn or not*/
-            if ((playerTurn ? !Game.hPlacing : ship.vertical)) {
+            if ((playerTurn ? !hPlacing : !ship.hPlacing)) {
                 for (int i = y; i < y + length; i++) {
                     Cell cell = getCell(x, i);
                     cell.ship = ship;
@@ -70,13 +69,13 @@ public class Board extends Parent {
         }
         return false;
     }
-    public HoveringShip copyHoveringShip(HoveringShip shipHover, int x, int y){
+    public HoveringShip copyHoveringShip(HoveringShip shipHover, int x, int y,boolean hPlacing){
         int length = shipHover.getType();
         HoveringShip copy=new HoveringShip(length);
 //      -----------  handling copy styling--------------------------------------
         copy.getStyleClass().clear();
         copy.getStyleClass().add("shipGeneral");
-        if(Game.hPlacing){
+        if(hPlacing){
             copy.getStyleClass().add("ship"+length);
             copy.setPrefSize(180, 30);
             copy.setMaxSize(180, 30);
@@ -89,9 +88,9 @@ public class Board extends Parent {
 //        ----------------------------------------------
         double xBase = 35;
         double yBase = 425;
-        double eqX = xBase + 30 * x + (Game.hPlacing ? 17 : 18);
+        double eqX = xBase + 30 * x + 18;
         copy.setTranslateX(eqX);
-        double eqY = yBase + 30 * y + (Game.hPlacing ? 4 : 0);
+        double eqY = yBase + 30 * y + (hPlacing ? 2 : 0);
         copy.setTranslateY(eqY);
 
         return copy;
@@ -124,7 +123,7 @@ public class Board extends Parent {
     private boolean canPlaceShip(Ship ship, int x, int y) {
         int length = ship.type;
 
-        if (ship.vertical) {
+        if (!ship.hPlacing) {
             for (int i = y; i < y + length; i++) {
                 if (!isValidPoint(x, i))
                     return false;

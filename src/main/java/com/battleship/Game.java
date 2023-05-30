@@ -17,7 +17,7 @@ public class Game extends StackPane {
     private final Random random = new Random();
     private int shipsToPlace = 6;
     public HoveringShip shipHover = new HoveringShip(shipsToPlace);
-    public static boolean hPlacing = false;
+    public boolean hPlacing = false;
     //    SoundHandling objects
     public final  SoundHandling theme = new SoundHandling("sounds/theme.wav",0);
     private final SoundHandling win = new SoundHandling("sounds/win.wav",0);
@@ -38,8 +38,8 @@ public class Game extends StackPane {
         });
         /* Changing shipHover image and dimensions on scroll */
         this.setOnScroll(e -> {
-            shipHover.rotate(Game.hPlacing);
-            shipHover.rotateStylee(Game.hPlacing, shipsToPlace);
+            shipHover.rotate(hPlacing);
+            shipHover.rotateStylee(hPlacing, shipsToPlace);
             hPlacing=!hPlacing;
         });
         enemyBoard = new Board(true, event -> {
@@ -75,8 +75,8 @@ public class Game extends StackPane {
                 return;
 
             Cell cell = (Cell) event.getSource();
-            if (playerBoard.placeShip(new Ship(shipsToPlace, !Game.hPlacing), cell.x, cell.y, true)) {
-                HoveringShip copyShip =playerBoard.copyHoveringShip(shipHover, cell.x, cell.y);
+            if (playerBoard.placeShip(new Ship(shipsToPlace, hPlacing), cell.x, cell.y, true,hPlacing)) {
+                HoveringShip copyShip =playerBoard.copyHoveringShip(shipHover, cell.x, cell.y,hPlacing);
                 if(copyShip!=null){
                     this.getChildren().add(copyShip);
                     shipHover.resettingCss(shipsToPlace);
@@ -133,7 +133,7 @@ public class Game extends StackPane {
             int y = random.nextInt(10);
 
 
-            if (enemyBoard.placeShip(new Ship(type, Math.random() < 0.5), x, y, false)) {
+            if (enemyBoard.placeShip(new Ship(type, Math.random() < 0.5), x, y, false ,hPlacing)) {
                 type--;
             }
         }

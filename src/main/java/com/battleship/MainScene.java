@@ -21,9 +21,9 @@ public class MainScene extends AnchorPane {
         this.setPrefSize(600,800);
         this.getStyleClass().add("anchor-pane");
         menu.setPrefSize(600, 600);
-        Image logo = new Image(Utils.PATH + "imgs/gameLogo.png", 400, 153.5, true, true);
+        Image logo = new Image(Config.PATH + "imgs/gameLogo.png", 400, 153.5, true, true);
         ImageView logoView = new ImageView(logo);
-        Image startBtn = new Image(Utils.PATH + "imgs/start.png", 200, 62, true, true);
+        Image startBtn = new Image(Config.PATH + "imgs/start.png", 200, 62, true, true);
         ImageView startBtnView = new ImageView(startBtn);
         startBtnView.getStyleClass().add("startBtn");
         menu.getChildren().addAll(logoView, startBtnView);
