@@ -5,25 +5,26 @@ import javafx.geometry.Pos;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 public class Game extends StackPane {
+    ArrayList<Integer> listOfShips = new ArrayList<>(Arrays.asList(2,3,4,5,6));
     private final Sidebar sidebar = new Sidebar();
     private Board enemyBoard;
     private Board playerBoard;
     private boolean running = false;
     private boolean enemyTurn = false;
     private final Random random = new Random();
-    private int shipsToPlace = 6;
-    public HoveringShip shipHover = new HoveringShip(shipsToPlace);
+    public HoveringShip shipHover = new HoveringShip(6);
     public boolean hPlacing = false;
     //    SoundHandling objects
-    public final  SoundHandling theme = new SoundHandling("sounds/theme.wav",0);
     private final SoundHandling win = new SoundHandling("sounds/win.wav",0);
     private final SoundHandling lose = new SoundHandling("sounds/lose.wav",0);
+    private final SoundHandling gamePlay = new SoundHandling("sounds/gamePlay.wav",0);
     //-----------
-    public Game(SoundHandling gamePlay){
+    public Game(SoundHandling theme){
         BorderPane root = new BorderPane();
         this.setMinSize(600, 800);
         root.setPrefSize(600, 800);
@@ -39,7 +40,7 @@ public class Game extends StackPane {
         /* Changing shipHover image and dimensions on scroll */
         this.setOnScroll(e -> {
             shipHover.rotate(hPlacing);
-            shipHover.rotateStylee(hPlacing, shipsToPlace);
+            shipHover.rotateStyle(hPlacing, shipHover.getType());
             hPlacing=!hPlacing;
         });
         enemyBoard = new Board(true, event -> {
@@ -75,16 +76,21 @@ public class Game extends StackPane {
                 return;
 
             Cell cell = (Cell) event.getSource();
-            if (playerBoard.placeShip(new Ship(shipsToPlace, hPlacing), cell.x, cell.y, true,hPlacing)) {
+            if (playerBoard.placeShip(new Ship(shipHover.getType(), hPlacing), cell.x, cell.y, true,hPlacing)) {
                 HoveringShip copyShip =playerBoard.copyHoveringShip(shipHover, cell.x, cell.y,hPlacing);
                 if(copyShip!=null){
                     this.getChildren().add(copyShip);
-                    shipHover.resettingCss(shipsToPlace);
-                    shipHover.setType(--shipsToPlace);
+                    listOfShips.remove(Integer.valueOf(shipHover.getType()));
+                    if (!listOfShips.isEmpty()){
+                        int randomInt = (int)Math.floor(Math.random() * (listOfShips.size()) + 0);
+                        shipHover.setStyling(hPlacing,listOfShips.get(randomInt));
+                    }
                     hPlacing=false;
                 }
-                if((shipsToPlace == 1)){
+                if(listOfShips.isEmpty()){
+                    shipHover.getStyleClass().clear();
                     sidebar.setScoreTxt("Game\nStarted");
+                    theme.stop();
                     startGame(gamePlay);
                 }
             }
@@ -122,8 +128,6 @@ public class Game extends StackPane {
         }
     }
     private void startGame(SoundHandling gamePlay){
-//        stop the theme song and start the gameplay song
-        theme.stop();
         gamePlay.play();
         /* place enemy ships */
         int type = 6;
@@ -139,6 +143,20 @@ public class Game extends StackPane {
         }
 
         running = true;
+    }
+    void getaSmallerShip() {
+        int newType=shipHover.getType()-1;
+        if(!listOfShips.contains(newType))
+            return;
+        shipHover.setStyling(hPlacing,newType);
+    }
+    void getaBiggerShip() {
+        int newIndex = listOfShips.indexOf(shipHover.getType())+1;
+        if(newIndex > listOfShips.size()-1) {
+            return;
+        }
+        int newType= listOfShips.get(newIndex);
+        shipHover.setStyling(hPlacing,newType);
     }
 
 }

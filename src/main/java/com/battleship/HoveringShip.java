@@ -29,16 +29,24 @@ public class HoveringShip extends Pane {
             this.setMaxSize(30, 180);
         }
     }
-    public void rotateStylee(boolean hPlacing, int shipsToPlace){
-        this.getStyleClass().remove("ship" + shipsToPlace + "v");
-        this.getStyleClass().remove("ship" + shipsToPlace);
-        this.getStyleClass().add("ship" + shipsToPlace + (hPlacing? "v" : ""));
+    public void rotateStyle(boolean hPlacing, int type){
+        this.getStyleClass().remove("ship" + type + "v");
+        this.getStyleClass().remove("ship" + type);
+        this.getStyleClass().add("ship" + type + (hPlacing? "v" : ""));
     }
-    public void resettingCss(int length){
-        this.getStyleClass().remove("ship" + (length) + "v");
-        this.getStyleClass().remove("ship" + (length));
-        this.setPrefSize(30, 180);
-        this.setMaxSize(30, 180);
-        this.getStyleClass().add("ship" + (length - 1) + "v");
+    public void setStyling(boolean hPlacing,int type){
+        this.type=type;
+        this.getStyleClass().clear();
+        this.getStyleClass().add("shipGeneral");
+        if(hPlacing){
+            this.getStyleClass().add("ship"+type);
+            this.setPrefSize(180, 30);
+            this.setMaxSize(180, 30);
+        }
+        else {
+            this.getStyleClass().add("ship"+this.type+"v");
+            this.setPrefSize(30, 180);
+            this.setMaxSize(30, 180);
+        }
     }
 }

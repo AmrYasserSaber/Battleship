@@ -72,20 +72,8 @@ public class Board extends Parent {
     public HoveringShip copyHoveringShip(HoveringShip shipHover, int x, int y,boolean hPlacing){
         int length = shipHover.getType();
         HoveringShip copy=new HoveringShip(length);
-//      -----------  handling copy styling--------------------------------------
-        copy.getStyleClass().clear();
-        copy.getStyleClass().add("shipGeneral");
-        if(hPlacing){
-            copy.getStyleClass().add("ship"+length);
-            copy.setPrefSize(180, 30);
-            copy.setMaxSize(180, 30);
-        }
-        else {
-            copy.getStyleClass().add("ship"+length+"v");
-            copy.setPrefSize(30, 180);
-            copy.setMaxSize(30, 180);
-        }
-//        ----------------------------------------------
+        copy.setStyling(hPlacing,shipHover.getType());
+
         double xBase = 35;
         double yBase = 425;
         double eqX = xBase + 30 * x + 18;
