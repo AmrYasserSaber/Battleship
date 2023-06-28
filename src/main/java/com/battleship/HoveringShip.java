@@ -9,9 +9,7 @@ public class HoveringShip extends Pane {
         return type;
     }
 
-    public void setType(int type) {
-        this.type = type;
-    }
+
 
     public HoveringShip(int type){
         this.type=type;
