@@ -3,10 +3,20 @@ package com.battleship;
 import javafx.scene.layout.Pane;
 
 public class HoveringShip extends Pane {
-    public HoveringShip(){
+    private int type;
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public HoveringShip(int type){
+        this.type=type;
         this.setPrefSize(30, 180);
         this.setMaxSize(30, 180);
-
         this.getStyleClass().add("shipGeneral");
         this.getStyleClass().add("ship6v");
     }
@@ -19,10 +29,24 @@ public class HoveringShip extends Pane {
             this.setMaxSize(30, 180);
         }
     }
-    public boolean changeStyling(boolean hPlacing,int shipsToPlace){
-        this.getStyleClass().remove("ship" + shipsToPlace + "v");
-        this.getStyleClass().remove("ship" + shipsToPlace);
-        this.getStyleClass().add("ship" + shipsToPlace + (hPlacing? "v" : ""));
-        return (!hPlacing);
+    public void rotateStyle(boolean hPlacing, int type){
+        this.getStyleClass().remove("ship" + type + "v");
+        this.getStyleClass().remove("ship" + type);
+        this.getStyleClass().add("ship" + type + (hPlacing? "v" : ""));
+    }
+    public void setStyling(boolean hPlacing,int type){
+        this.type=type;
+        this.getStyleClass().clear();
+        this.getStyleClass().add("shipGeneral");
+        if(hPlacing){
+            this.getStyleClass().add("ship"+type);
+            this.setPrefSize(180, 30);
+            this.setMaxSize(180, 30);
+        }
+        else {
+            this.getStyleClass().add("ship"+this.type+"v");
+            this.setPrefSize(30, 180);
+            this.setMaxSize(30, 180);
+        }
     }
 }

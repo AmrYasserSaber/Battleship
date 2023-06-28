@@ -21,7 +21,7 @@ public class Sidebar extends VBox {
         StackPane score = new StackPane();
         score.setPrefWidth(100);
         score.setPrefHeight(400);
-        ImageView scoreIcon = new ImageView(new Image(BattleshipMain.path + "imgs/scoreBoard.png"));
+        ImageView scoreIcon = new ImageView(new Image(Config.PATH + "imgs/scoreBoard.png"));
         scoreIcon.setFitWidth(150);
         scoreIcon.setPreserveRatio(true);
         Font scoreFont = Font.font("Thoma", 20);
@@ -33,8 +33,8 @@ public class Sidebar extends VBox {
         this.setSpacing(5);
         this.setPadding(new Insets(20));
     }
-    public void setScoreVal (int newvalue){
-        this.scoreVal=newvalue;
+    public void setScoreVal (int newValue){
+        this.scoreVal= newValue;
     }
 
     public int getScoreVal() {
@@ -45,10 +45,7 @@ public class Sidebar extends VBox {
         this.scoreTxt.setText(String.valueOf(scoreTxt));
     }
 
-    public Text getScoreTxt() {
-        return scoreTxt;
-    }
-    public void setScorestyle(String scoreStyle){
+    public void setScoreStyle(String scoreStyle){
         this.scoreTxt.setStyle(scoreStyle);
     }
 }

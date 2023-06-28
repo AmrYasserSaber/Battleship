@@ -26,8 +26,7 @@
     -fx-background-color: #ffffff00;
 }
 
-.shipHover{/*
-    -fx-background-image: url("./imgs/5cell.png"); /* Set the background image */
+.shipHover{
     -fx-background-size: contain;
     -fx-opacity: 0.5;
 }
@@ -36,11 +35,6 @@
     -fx-background-image: url("./imgs/cell.png");
     -fx-background-color: #00000055;
     -fx-background-size: contain;
-}
-
-
-.ship0{
-    -fx-background-image: none;
 }
 
 .shipGeneral{

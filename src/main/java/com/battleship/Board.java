@@ -9,7 +9,6 @@ import javafx.scene.Parent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
 
@@ -39,39 +38,11 @@ public class Board extends Parent {
         getChildren().add(rows);
     }
 
-    public boolean placeShip(Ship ship, int x, int y, boolean playerTurn) {
+    public boolean placeShip(Ship ship, int x, int y, boolean playerTurn,boolean hPlacing) {
         if (canPlaceShip(ship, x, y)) {
             int length = ship.type;
-            if(playerTurn){
-                double xBase = 35;
-                double yBase = 425;
-                /*-----------------Placing the image---------------------*/
-                Pane lolD = new Pane();
-                lolD.getStyleClass().addAll(BattleshipMain.shipHover.getStyleClass());
-                lolD.setPrefSize(BattleshipMain.shipHover.getWidth(), BattleshipMain.shipHover.getHeight());
-                lolD.setMaxSize(BattleshipMain.shipHover.getWidth(), BattleshipMain.shipHover.getHeight());
-                double eqX = xBase + 30 * x + (BattleshipMain.hPlacing ? 17 : 18);
-                lolD.setTranslateX(eqX);
-                double eqY = yBase + 30 * y + (BattleshipMain.hPlacing ? 4 : 0);
-                lolD.setTranslateY(eqY);
-
-                BattleshipMain.basis.getChildren().add(lolD);
-
-
-
-                /*----------------- -------------- ---------------------*/
-
-                /*-------------  Resetting CSS Settings to avoid overwriting issues -----------*/
-                BattleshipMain.shipHover.getStyleClass().remove("ship" + (length) + "v");
-                BattleshipMain.shipHover.getStyleClass().remove("ship" + (length));
-                BattleshipMain.shipHover.setPrefSize(30, 180);
-                BattleshipMain.shipHover.setMaxSize(30, 180);
-                BattleshipMain.shipHover.getStyleClass().add("ship" + (length - 1) + "v");
-                /*------------- --------------------------------------------------- -----------*/
-
-            }
             /*here the condition depends on whether it's the player turn or not*/
-            if ((playerTurn ? !BattleshipMain.hPlacing : ship.vertical)) {
+            if ((playerTurn ? !hPlacing : !ship.hPlacing)) {
                 for (int i = y; i < y + length; i++) {
                     Cell cell = getCell(x, i);
                     cell.ship = ship;
@@ -94,13 +65,25 @@ public class Board extends Parent {
                     }
                 }
             }
-            BattleshipMain.hPlacing = false;
-
             return true;
         }
-
         return false;
     }
+    public HoveringShip copyHoveringShip(HoveringShip shipHover, int x, int y,boolean hPlacing){
+        int length = shipHover.getType();
+        HoveringShip copy=new HoveringShip(length);
+        copy.setStyling(hPlacing,shipHover.getType());
+
+        double xBase = 35;
+        double yBase = 425;
+        double eqX = xBase + 30 * x + 18;
+        copy.setTranslateX(eqX);
+        double eqY = yBase + 30 * y + (hPlacing ? 2 : 0);
+        copy.setTranslateY(eqY);
+
+        return copy;
+    }
+
 
     public Cell getCell(int x, int y) {
         return (Cell)((HBox)rows.getChildren().get(y)).getChildren().get(x);
@@ -128,7 +111,7 @@ public class Board extends Parent {
     private boolean canPlaceShip(Ship ship, int x, int y) {
         int length = ship.type;
 
-        if (ship.vertical) {
+        if (!ship.hPlacing) {
             for (int i = y; i < y + length; i++) {
                 if (!isValidPoint(x, i))
                     return false;
